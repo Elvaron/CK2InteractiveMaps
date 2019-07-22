@@ -1,0 +1,160 @@
+<html>
+<head>
+
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+
+<script src="jquery-3.4.1.min.js"></script>
+<script src="jquery-ui.min.js"></script>
+<script src="jquery.flowchart.js"></script>
+
+<link rel="stylesheet" href="characters.css"/>
+<link rel="stylesheet" href="jquery.flowchart.css">
+<title>Characters</title>
+</head>
+<body>
+
+<center>
+	<table>
+		<tr>
+			<td width=250 style="vertical-align:top">
+				<div id="character_list"><select size=31 style="min-width: 200" id="select_character_list"></select></div>
+				<button type="button" style="min-width: 200" id="add_new_character">Add new Character</button>
+				<button type="button" style="min-width: 200" id="save_json">Save to JSON</button>
+				<input id="contentFile" type="file" accept="application/json" />
+			</td>
+			<td width=500 style="vertical-align:top">
+				<div id="character_form">
+					<table width=600>
+						<tr>
+							<td>ID:</td>
+							<td><div id="CharacterId"></div></td>
+							<td>Name:</td>
+							<td><input type="text" name="CharacterName"/></td>
+						</tr>
+						<tr>
+							<td>Alive:</td>
+							<td><input type="checkbox" name="CharacterAlive"/></td>
+							<td>Gender:</td>
+							<td><select id="CharacterGender"></select></td>
+						</tr>
+						<tr>
+							<td>Age:</td>
+							<td><input type="number" name="CharacterAge" min="1" max="999" step="1"/></td>
+							<td>Epithet:</td>
+							<td><input type="text" name="CharacterEpithet"/></td>
+						</tr>
+						<tr>
+							<td>Stronghold Type:</td>
+							<td><select id="select_character_stronghold_type"></select></td>
+							<td>Stronghold Class:</td>
+							<td><select id="select_character_stronghold_class"></select></td>
+						</tr>
+						<tr>
+							<td>NPC Class:</td>
+							<td><select id="select_character_npc_class"></select></td>
+							<td>House:</td>
+							<td><select id="select_character_house" style="min-width: 136"></select></td>
+						</tr>
+						<tr>
+							<td>Race:</td>
+							<td><select id="select_character_race"></select></td>
+							<td>New House:</td>
+							<td><input type="text" name="add_new_house"/><button type="button" id="save_house">+</button></td>
+						</tr>
+						<tr>
+							<td>Strength:</td>
+							<td><input type="number" name="CharacterSTR" min="1" max="30" step="1"/></td>
+							<td>Diplomacy:</td>
+							<td><input type="number" name="CharacterDIPL" min="0" max="30" step="1"/></td>
+						</tr>
+						<tr>
+							<td>Dexterity:</td>
+							<td><input type="number" name="CharacterDEX" min="1" max="30" step="1"/></td>
+							<td>Martial:</td>
+							<td><input type="number" name="CharacterMART" min="0" max="30" step="1"/></td>
+						</tr>
+						<tr>
+							<td>Constitution:</td>
+							<td><input type="number" name="CharacterCON" min="1" max="30" step="1"/></td>
+							<td>Stewardship:</td>
+							<td><input type="number" name="CharacterSTEW" min="0" max="30" step="1"/></td>
+						</tr>
+						<tr>
+							<td>Intelligence:</td>
+							<td><input type="number" name="CharacterINT" min="1" max="30" step="1"/></td>
+							<td>Intrigue:</td>
+							<td><input type="number" name="CharacterINTR" min="0" max="30" step="1"/></td>
+						</tr>
+						<tr>
+							<td>Wisdom:</td>
+							<td><input type="number" name="CharacterWIS" min="1" max="30" step="1"/></td>
+							<td>Learning:</td>
+							<td><input type="number" name="CharacterLEAR" min="0" max="30" step="1"/></td>
+						</tr>
+						<tr>
+							<td>Charisma:</td>
+							<td><input type="number" name="CharacterCHA" min="1" max="30" step="1"/></td>
+							<td>Combat:</td>
+							<td><input type="number" name="CharacterCOMB" min="0" max="40" step="1"/></td>
+						</tr>
+						<tr>
+							<td>Alignment:</td>
+							<td><select id="select_character_alignment" style="min-width: 136"></select></td>
+							<td>Armor Class:</td>
+							<td><input type="number" name="CharacterArmorClass" min="1" max="100" step="1"/></td>
+						</tr>
+					</table>
+					<table width=600>
+						<tr>
+							<td style="max-width: 250;min-width: 250">Assigned Traits:</td>
+							<td style="max-width: 250;min-width: 250">Available Traits:</td>
+						</tr>
+						<tr>
+							<td><button type="button" style="max-width: 250;min-width: 250;min-width: 250" id="remove_trait" disabled>Remove Selected</button></td>
+							<td><button type="button" style="max-width: 250;min-width: 250" id="add_trait" disabled>Add Selected</button></td>
+						</tr>
+						<tr>
+							<td><select multiple style="max-width: 250;min-width: 250" id="select_character_current_traits" size=10></select></td>
+							<td><select multiple style="max-width: 250;min-width: 250" id="select_character_available_traits" size=10></select></td>
+						</tr>
+						<tr>
+							<td><button type="button" style="max-width: 250;min-width: 250" id="save_character" disabled>Save Character</button></td>
+							<td><button type="button" style="max-width: 250;min-width: 250" id="delete_character" disabled>Delete Character</button></td>
+						</tr>
+					</table>
+				</div>
+			</td>
+			<td style="min-width:200;vertical-align: top;text-align: center">
+				<canvas id="portrait" width="200" height="200">Your browser does not support the HTML5 canvas tag.</canvas><br/>
+				<button type="button" style="max-width:250;min-width:200" id="randomPortrait" disabled>Randomize Portrait</button><br />
+				<button type="button" style="max-width:250;min-width:200" id="randomDndStats" disabled>Randomize D&D Stats</button><br />
+				<button type="button" style="max-width:250;min-width:200" id="randomTraits" disabled>Randomize Traits</button><br />
+				<img name="house_emblem" src=""/>				
+			</td>
+		</tr>
+	</table>
+	<hr>
+	<div>Character Relationships | Remember: Only connections from/to current character are saved | Add character to graph: <select id="select_character_graph" style="min-width: 136"></select></div>
+	<br />
+	<div id="character_relationships" class="flowchart-example-container flowchart-container" style="border:1px solid #BBB;min-width:1000;max-width:1000;min-height:600"></div>
+</center>
+
+<script src="provinces.js"></script>
+<script src="enums.js"></script>
+<script src="character.js"></script>
+<script src="traits.js"></script>
+<script src="metadata.js"></script>
+<script src="racialBonuses.js"></script>
+<script src="npcClasses.js"></script>
+<script src="downloader.js"></script>
+<script src="relationships.js"></script>
+<script src="canvasRenderer.js"></script>
+<script src="characterPortraitRenderer.js"></script>
+
+<script src="randomCharacterTraits.js"></script>
+
+<script src="load_characters.js"></script>
+
+</body>
+</html>

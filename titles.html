@@ -1,0 +1,172 @@
+<html>
+<head>
+
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+
+<script src="jquery-3.4.1.min.js"></script>
+<script src="jquery-ui.min.js"></script>
+<script src="jquery.flowchart.js"></script>
+
+<link rel="stylesheet" href="characters.css"/>
+<link rel="stylesheet" href="jquery.flowchart.css">
+<title>Landed Titles</title>
+</head>
+<body>
+
+<center>
+	<table>
+		<tr>
+			<td width=250 style="vertical-align:top">
+				<div id="titles_list"><select size=31 style="min-width: 200" id="select_titles_list"></select></div>
+				<button type="button" style="min-width: 200" id="add_new_county">Add new County</button>
+				<button type="button" style="min-width: 200" id="add_new_duchy">Add new Duchy</button>
+				<button type="button" style="min-width: 200" id="add_new_kingdom">Add new Kingdom</button>
+				<button type="button" style="min-width: 200" id="add_new_empire">Add new Empire</button>
+				<br />
+				<button type="button" style="min-width: 200" id="save_json">Save to JSON</button>
+				<input id="contentFile" type="file" accept="application/json" />
+			</td>
+			<td width=500 style="vertical-align:top">
+				<div id="title_form">
+					<table width=600>
+						<tr>
+							<td>ID:</td>
+							<td><div id="TitleId"></div></td>
+							<td>Name:</td>
+							<td><input type="text" name="TitleName" disabled/></td>
+						</tr>
+						<tr>
+							<td>Type:</td>
+							<td><select id="TitleType"></select></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</table>
+					<hr>
+					<div id="aboveCounty">
+						Duchy/Kingdom/Empire Controls
+						<table width=600 name="titlesControls">
+							<tr>
+								<td style="max-width: 250;min-width: 250">Assigned Lower Titles:</td>
+								<td style="max-width: 250;min-width: 250">Available Lower Titles:</td>
+							</tr>
+							<tr>
+								<td><button type="button" style="max-width: 250;min-width: 250;min-width: 250" id="remove_lower_title" disabled>Remove Selected</button></td>
+								<td><button type="button" style="max-width: 250;min-width: 250" id="add_lower_title" disabled>Add Selected</button></td>
+							</tr>
+							<tr>
+								<td><select multiple style="max-width: 250;min-width: 250" id="select_title_current_lower_titles" size=10></select></td>
+								<td><select multiple style="max-width: 250;min-width: 250" id="select_title_available_lower_titles" size=10></select></td>
+							</tr>
+						</table>
+					</div>
+					<div id="belowCounty">
+						<div>County Controls</div>
+						<table width=600 name="holdingsControls">
+							<tr>
+								<td colspan="5" style="border:1px solid #BBB;"><center>Primary Holding</center></td>
+							</tr>
+							<tr style="vertical-align: top">
+								<td><input type="hidden" name="HoldingId1"/>Holding Type:</td>
+								<td><select id="HoldingType1" style="min-width:100"></select></td>
+								<td>Holding Name</td>
+								<td><input type="text" name="HoldingName1"/></td>
+								<td style="min-width:80"><img name="title_emblem1" src=""/></td>
+							</tr>
+							<tr><td colspan="5">&nbsp;</td></tr>
+							<tr>
+								<td colspan="5" style="border:1px solid #BBB;"><center>Holding 2</center></td>
+							</tr>
+							<tr style="vertical-align: top">
+								<td><input type="hidden" name="HoldingId2"/>Holding Type:</td>
+								<td><select id="HoldingType2" style="min-width:100"></select></td>
+								<td>Holding Name</td>
+								<td><input type="text" name="HoldingName2"/></td>
+								<td style="min-width:80"><img name="title_emblem2" src=""/></td>
+							</tr>
+							<tr><td colspan="5">&nbsp;</td></tr>
+							<tr>
+								<td colspan="5" style="border:1px solid #BBB;"><center>Holding 3</center></td>
+							</tr>
+							<tr style="vertical-align: top">
+								<td><input type="hidden" name="HoldingId3"/>Holding Type:</td>
+								<td><select id="HoldingType3" style="min-width:100"></select></td>
+								<td>Holding Name</td>
+								<td><input type="text" name="HoldingName3"/></td>
+								<td style="min-width:80"><img name="title_emblem3" src=""/></td>
+							</tr>
+							<tr><td colspan="5">&nbsp;</td></tr>
+							<tr>
+								<td colspan="5" style="border:1px solid #BBB;"><center>Holding 4</center></td>
+							</tr>
+							<tr style="vertical-align: top">
+								<td><input type="hidden" name="HoldingId4"/>Holding Type:</td>
+								<td><select id="HoldingType4" style="min-width:100"></select></td>
+								<td>Holding Name</td>
+								<td><input type="text" name="HoldingName4"/></td>
+								<td style="min-width:80"><img name="title_emblem4" src=""/></td>
+							</tr>
+							<tr><td colspan="5">&nbsp;</td></tr>
+							<tr>
+								<td colspan="5" style="border:1px solid #BBB;"><center>Holding 5</center></td>
+							</tr>
+							<tr style="vertical-align: top">
+								<td><input type="hidden" name="HoldingId5"/>Holding Type:</td>
+								<td><select id="HoldingType5" style="min-width:100"></select></td>
+								<td>Holding Name</td>
+								<td><input type="text" name="HoldingName5"/></td>
+								<td style="min-width:80"><img name="title_emblem5" src=""/></td>
+							</tr>
+							<tr><td colspan="5">&nbsp;</td></tr>
+							<tr>
+								<td colspan="5" style="border:1px solid #BBB;"><center>Holding 6</center></td>
+							</tr>
+							<tr style="vertical-align: top">
+								<td><input type="hidden" name="HoldingId6"/>Holding Type:</td>
+								<td><select id="HoldingType6" style="min-width:100"></select></td>
+								<td>Holding Name</td>
+								<td><input type="text" name="HoldingName6"/></td>
+								<td style="min-width:80"><img name="title_emblem6" src=""/></td>
+							</tr>
+							<tr><td colspan="5">&nbsp;</td></tr>
+							<tr>
+								<td colspan="5" style="border:1px solid #BBB;"><center>Holding 7</center></td>
+							</tr>
+							<tr style="vertical-align: top">
+								<td><input type="hidden" name="HoldingId7"/>Holding Type:</td>
+								<td><select id="HoldingType7" style="min-width:100"></select></td>
+								<td>Holding Name</td>
+								<td><input type="text" name="HoldingName7"/></td>
+								<td style="min-width:80"><img name="title_emblem7" src=""/></td>
+							</tr>
+						</table>
+					</div>
+					<hr>
+					<table width=600>
+						<tr>
+							<td><button type="button" style="max-width: 250;min-width: 250" id="save_title" disabled>Save Title</button></td>
+							<td><button type="button" style="max-width: 250;min-width: 250" id="delete_title" disabled>Delete Title</button></td>
+						</tr>
+					</table>
+				</div>
+			</td>
+			<td style="min-width:80">
+				<img name="house_emblem" src=""/>
+			</td>
+		</tr>
+	</table>
+</center>
+
+<script src="enums.js"></script>
+<script src="character.js"></script>
+<script src="traits.js"></script>
+<script src="metadata.js"></script>
+<script src="racialBonuses.js"></script>
+<script src="npcClasses.js"></script>
+<script src="downloader.js"></script>
+
+<script src="load_titles.js"></script>
+
+</body>
+</html>

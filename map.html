@@ -1,0 +1,38 @@
+<html>
+<head>
+
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+crossorigin=""/>
+
+<link rel="stylesheet" href="map.css"/>
+
+<!-- Make sure you put this AFTER Leaflet's CSS -->
+<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+crossorigin=""></script>
+
+</head>
+<body>
+
+<center>
+	<table><tr>
+		<td><div id="map_tadinthadar"></div></td>
+		<td><canvas id="province" width="550" height="695">Your browser does not support the HTML5 canvas tag.</canvas></td>
+	</tr></table>
+</center>
+
+<script src="map.js"></script>
+
+<script src="provinces.js"></script>
+
+<script src="enums.js"></script>
+<script src="character.js"></script>
+<script src="traits.js"></script>
+<script src="metadata.js"></script>
+
+</body>
+</html>
