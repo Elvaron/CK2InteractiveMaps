@@ -21,6 +21,11 @@ function clearEvents(targetCanvas)
 function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperCanvases)
 {
 	clearCanvas(targetCanvas);
+	for (var i = 0; i < helperCanvases.length; i++)
+	{
+		clearCanvas(helperCanvases[i]);
+	}
+
 	clearEvents(targetCanvas);
 	mouseOverAreas = [];
 	clickableAreas = [];
@@ -29,6 +34,8 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 	var elements = [[]];
 
 	var helperCanvasIterator = 0;
+
+	drawCouncil(null, true, offset, renderStack, targetCanvas, helperCanvases);
 
 	var traits = GetTraits();
 
@@ -59,12 +66,19 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 	elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 190, offset[2] + 6, 100, 18, dndStats[4], "right", "black", true, targetCanvas));
 	elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 214, offset[2] + 6, 100, 18, dndStats[5], "right", "black", true, targetCanvas));
 
-	elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 99, offset[2] + 7, 100, 18, dndStats[6], "right", "black", true, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 121, offset[2] + 7, 100, 18, dndStats[7], "right", "black", true, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 143, offset[2] + 7, 100, 18, dndStats[8], "right", "black", true, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 167, offset[2] + 7, 100, 18, dndStats[9], "right", "black", true, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 190, offset[2] + 7, 100, 18, dndStats[10], "right", "black", true, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 214, offset[2] + 7, 100, 18, dndStats[11], "right", "black", true, targetCanvas));
+	elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 97, offset[2] + 7, 100, 17, "(     )", "right", "black", false, targetCanvas));
+	elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 119, offset[2] + 7, 100, 17, "(     )", "right", "black", false, targetCanvas));
+	elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 141, offset[2] + 7, 100, 17, "(     )", "right", "black", false, targetCanvas));
+	elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 165, offset[2] + 7, 100, 17, "(     )", "right", "black", false, targetCanvas));
+	elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 188, offset[2] + 7, 100, 17, "(     )", "right", "black", false, targetCanvas));
+	elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 212, offset[2] + 7, 100, 17, "(     )", "right", "black", false, targetCanvas));
+
+	elements[0].push( new TextLabel(offset[0] + 518, offset[1] + 99, offset[2] + 8, 100, 18, dndStats[6], "right", "black", true, targetCanvas));
+	elements[0].push( new TextLabel(offset[0] + 518, offset[1] + 121, offset[2] + 8, 100, 18, dndStats[7], "right", "black", true, targetCanvas));
+	elements[0].push( new TextLabel(offset[0] + 518, offset[1] + 143, offset[2] + 8, 100, 18, dndStats[8], "right", "black", true, targetCanvas));
+	elements[0].push( new TextLabel(offset[0] + 518, offset[1] + 167, offset[2] + 8, 100, 18, dndStats[9], "right", "black", true, targetCanvas));
+	elements[0].push( new TextLabel(offset[0] + 518, offset[1] + 190, offset[2] + 8, 100, 18, dndStats[10], "right", "black", true, targetCanvas));
+	elements[0].push( new TextLabel(offset[0] + 518, offset[1] + 214, offset[2] + 8, 100, 18, dndStats[11], "right", "black", true, targetCanvas));
 
 	// -------------------------------------- SPOUSE --------------------------------------
 	if (myCharacter.spouse > 0 && characterMap.has(myCharacter.spouse))
@@ -135,12 +149,26 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 	// -------------------------------------- CK2 Attributes & Modifiers --------------------------------------
 	var ck2Stats = myCharacter.getCK2Stats();
 
-	elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 238, offset[2] + 12, 100, 18, ck2Stats[0], "right", "white", false, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 259, offset[2] + 12, 100, 18, ck2Stats[1], "right", "white", false, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 280, offset[2] + 12, 100, 18, ck2Stats[2], "right", "white", false, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 301, offset[2] + 12, 100, 18, ck2Stats[3], "right", "white", false, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 322, offset[2] + 12, 100, 18, ck2Stats[4], "right", "white", false, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 343, offset[2] + 12, 100, 18, ck2Stats[5], "right", "white", false, targetCanvas));
+	elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 238, offset[2] + 12, 100, 17, ck2Stats[0], "right", "white", false, targetCanvas));
+	elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 259, offset[2] + 12, 100, 17, ck2Stats[1], "right", "white", false, targetCanvas));
+	elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 280, offset[2] + 12, 100, 17, ck2Stats[2], "right", "white", false, targetCanvas));
+	elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 301, offset[2] + 12, 100, 17, ck2Stats[3], "right", "white", false, targetCanvas));
+	elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 322, offset[2] + 12, 100, 17, ck2Stats[4], "right", "white", false, targetCanvas));
+	elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 343, offset[2] + 12, 100, 17, ck2Stats[5], "right", "white", false, targetCanvas));
+
+	var stateAttributes = myCharacter.getStateAttributes();
+
+	elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 236, offset[2] + 13, 100, 17, "(     )", "right", "white", false, targetCanvas));
+	elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 257, offset[2] + 13, 100, 17, "(     )", "right", "white", false, targetCanvas));
+	elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 278, offset[2] + 13, 100, 17, "(     )", "right", "white", false, targetCanvas));
+	elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 299, offset[2] + 13, 100, 17, "(     )", "right", "white", false, targetCanvas));
+	elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 320, offset[2] + 13, 100, 17, "(     )", "right", "white", false, targetCanvas));
+
+	elements[0].push( new TextLabel(offset[0] + 520, offset[1] + 238, offset[2] + 14, 100, 17, stateAttributes[0], "right", "white", false, targetCanvas));
+	elements[0].push( new TextLabel(offset[0] + 520, offset[1] + 259, offset[2] + 14, 100, 17, stateAttributes[1], "right", "white", false, targetCanvas));
+	elements[0].push( new TextLabel(offset[0] + 520, offset[1] + 280, offset[2] + 14, 100, 17, stateAttributes[2], "right", "white", false, targetCanvas));
+	elements[0].push( new TextLabel(offset[0] + 520, offset[1] + 301, offset[2] + 14, 100, 17, stateAttributes[3], "right", "white", false, targetCanvas));
+	elements[0].push( new TextLabel(offset[0] + 520, offset[1] + 322, offset[2] + 14, 100, 17, stateAttributes[4], "right", "white", false, targetCanvas));
 
 	if (myCharacter.dndattributes.npcClass > 0 && npcClasses.has(myCharacter.dndattributes.npcClass))
 	{
@@ -444,8 +472,9 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 		// 344,262,87,24
 		elements[0].push( new Shape(offset[0] + 344, offset[1] + 262, offset[2] + 610, "profile/has_council.png", 87, 24, targetCanvas));
 		mouseOverAreas.push( new MouseOverShape(offset[0] + 344, offset[1] + 262, offset[0] + 344 + 87, offset[1] + 262 + 24, "View council") );
+		//drawCouncil (council, hide, offset, mainRenderStack, targetCanvas, helperCanvases)
 		clickableAreas.push( new ClickableShape(offset[0] + 344, offset[1] + 262, offset[0] + 344 + 87, offset[1] + 262 + 24, "Council Button", function () {
-			drawCouncil();
+			drawCouncil(myCharacter.council, false, offset, renderStack, targetCanvas, helperCanvases);
 		}));
 	}
 
@@ -851,23 +880,6 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 	loadRenderStack(renderStack);
 
 	//return elements;
-}
-
-var councilVisible = false;
-
-function drawCouncil ()
-{
-	if (councilVisible)
-	{
-		clearCanvasFromPoint("profile", 549, 0);
-		councilVisible = false;
-		return;
-	}
-
-	councilVisible = true;
-	var renderStack = new RenderStack();
-	renderStack.addElement(new Shape(549, 0, 0, "council/bg.png", 260, 540, "profile"));
-	loadRenderStack(renderStack);
 }
 
 /*

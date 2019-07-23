@@ -158,6 +158,78 @@ Character.prototype.addTitleClaim = function (name, importance) {
 	this.claims.push(id);
 }
 
+Character.prototype.getStateAttributes = function () {
+
+	var attributes = this.getCK2Stats();
+
+	var usedCharacters = [];
+
+	// If you have a regent, his stats count
+	if (this.regent > 0)
+	{
+		var regent = characterMap.get(this.regent);
+		attributes = regent.getCK2Stats();
+		usedCharacters.push(this.regent);
+	}
+
+	if (this.council)
+	{
+		// Each council member contibutes full, unless they are also regent
+		if (this.council.chancellor > 0 && this.council.chancellor != this.regent)
+		{
+			var chancellor = characterMap.get(this.council.chancellor);
+			usedCharacters.push(this.council.chancellor);
+			var councilAttributes = chancellor.getCK2Stats();
+			attributes[0] = attributes[0] + councilAttributes[0];
+		}
+
+		if (this.council.marshal > 0 && this.council.marshal != this.regent)
+		{
+			var marshal = characterMap.get(this.council.marshal);
+			usedCharacters.push(this.council.marshal);
+			var councilAttributes = marshal.getCK2Stats();
+			attributes[1] = attributes[1] + councilAttributes[1];
+		}
+
+		if (this.council.steward > 0 && this.council.steward != this.regent)
+		{
+			var steward = characterMap.get(this.council.steward);
+			usedCharacters.push(this.council.steward);
+			var councilAttributes = steward.getCK2Stats();
+			attributes[2] = attributes[2] + councilAttributes[2];
+		}
+
+		if (this.council.spymaster > 0 && this.council.spymaster != this.regent)
+		{
+			var spymaster = characterMap.get(this.council.spymaster);
+			usedCharacters.push(this.council.spymaster);
+			var councilAttributes = spymaster.getCK2Stats();
+			attributes[3] = attributes[3] + councilAttributes[3];
+		}
+
+		if (this.council.chaplain > 0 && this.council.chaplain != this.regent)
+		{
+			var chaplain = characterMap.get(this.council.chaplain);
+			usedCharacters.push(this.council.chaplain);
+			var councilAttributes = chaplain.getCK2Stats();
+			attributes[4] = attributes[4] + councilAttributes[4];
+		}
+	}
+
+	if (this.spouse > 0 && !usedCharacters.includes(this.spouse))
+	{
+		var spouse = characterMap.get(this.spouse);
+		var spouseAttributes = spouse.getCK2Stats();
+		attributes[0] = attributes[0] + Math.floor(spouseAttributes[0] * 0.5);
+		attributes[1] = attributes[1] + Math.floor(spouseAttributes[1] * 0.5);
+		attributes[2] = attributes[2] + Math.floor(spouseAttributes[2] * 0.5);
+		attributes[3] = attributes[3] + Math.floor(spouseAttributes[3] * 0.5);
+		attributes[4] = attributes[4] + Math.floor(spouseAttributes[4] * 0.5);
+	}
+
+	return attributes;
+}
+
 Character.prototype.addTrait = function (id) {
 	if (!this.traits.includes(id))
 	{
@@ -202,12 +274,12 @@ Character.prototype.getDndStats = function () {
 	result.push(this.dndattributes.intelligence);
 	result.push(this.dndattributes.wisdom);
 	result.push(this.dndattributes.charisma);
-	result.push("(" + this.getDndModifier(this.dndattributes.strength) + ")");
-	result.push("(" + this.getDndModifier(this.dndattributes.dexterity) + ")");
-	result.push("(" + this.getDndModifier(this.dndattributes.constitution) + ")");
-	result.push("(" + this.getDndModifier(this.dndattributes.intelligence) + ")");
-	result.push("(" + this.getDndModifier(this.dndattributes.wisdom) + ")");
-	result.push("(" + this.getDndModifier(this.dndattributes.charisma) + ")");
+	result.push(this.getDndModifier(this.dndattributes.strength));
+	result.push(this.getDndModifier(this.dndattributes.dexterity));
+	result.push(this.getDndModifier(this.dndattributes.constitution));
+	result.push(this.getDndModifier(this.dndattributes.intelligence));
+	result.push(this.getDndModifier(this.dndattributes.wisdom));
+	result.push(this.getDndModifier(this.dndattributes.charisma));
 
 	return result;
 }

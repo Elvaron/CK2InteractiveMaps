@@ -3,6 +3,8 @@ var characterMap = null;
 var globalToolTip = "argh";
 var clicker = null;
 var mover = null;
+var minMaxBounds = null;
+var minMaxClickableBounds = null;
 
 window.onload = function() {  
 
@@ -207,11 +209,13 @@ window.onload = function() {
 
 		var chancellor = getRandomNumber(0, myCharacter.vassals.length);
 		var myChancellor = myCharacter.vassals[chancellor];
+		characterMap.get(myChancellor).ck2attributes.diplomacy += 20;
 		myCharacter.council.chancellor = myChancellor;
 		picked.push(myChancellor);
 
 		var marshal = getRandomNumber(0, myCharacter.vassals.length);
 		var myMarshal = myCharacter.vassals[marshal];
+		characterMap.get(myMarshal).ck2attributes.martial += 20;
 		if (!picked.includes(myMarshal))
 		{
 			myCharacter.council.marshal = myMarshal;
@@ -220,6 +224,7 @@ window.onload = function() {
 
 		var steward = getRandomNumber(0, myCharacter.vassals.length);
 		var mySteward = myCharacter.vassals[steward];
+		characterMap.get(mySteward).ck2attributes.stewardship += 20;
 		if (!picked.includes(mySteward))
 		{
 			myCharacter.council.steward = mySteward;
@@ -228,6 +233,7 @@ window.onload = function() {
 
 		var spymaster = getRandomNumber(0, myCharacter.vassals.length);
 		var mySpymaster = myCharacter.vassals[spymaster];
+		characterMap.get(mySpymaster).ck2attributes.intrigue += 20;
 		if (!picked.includes(mySpymaster))
 		{
 			myCharacter.council.spymaster = mySpymaster;
@@ -236,6 +242,7 @@ window.onload = function() {
 
 		var chaplain = getRandomNumber(0, myCharacter.vassals.length);
 		var myChaplain = myCharacter.vassals[chaplain];
+		characterMap.get(myChaplain).ck2attributes.learning += 20;
 		if (!picked.includes(myChaplain))
 		{
 			myCharacter.council.chaplain = myChaplain;
@@ -291,12 +298,17 @@ window.onload = function() {
 			var cX = c.offsetLeft;
 			var cY = c.offsetTop;
 
-			var minMaxClickableBounds = getMinMaxBounds(clickableAreas);
-			var minMaxBounds = getMinMaxBounds(mouseOverAreas);
+			minMaxClickableBounds = getMinMaxBounds(clickableAreas);
+			minMaxBounds = getMinMaxBounds(mouseOverAreas);
 
 			clicker = function (event) {
 				var cursorX = event.pageX - cX;
 				var cursorY = event.pageY - cY;
+
+				if (minMaxClickableBounds == null)
+				{
+					return;
+				}
 
 				if (!minMaxClickableBounds.isInShape(cursorX,cursorY))
 				{
@@ -322,6 +334,11 @@ window.onload = function() {
 				var cursorY = event.pageY - cY;
 
 				$("#profile").attr("title", "");
+
+				if (minMaxBounds == null)
+				{
+					return;
+				}
 
 				if (!minMaxBounds.isInShape(cursorX,cursorY))
 				{

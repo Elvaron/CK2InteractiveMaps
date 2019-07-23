@@ -106,7 +106,7 @@ Shape.prototype.resolve = function (canvasMap) {
 	}
 }
 
-var TextLabel = function (x, y, z, maxWidth, fontSize, text, textalign, color, bold, targetId) {
+var TextLabel = function (x, y, z, maxWidth, fontSize, text, textalign, color, bold, targetId, useTrajan = false) {
 	this.x = x;
 	this.y = y;
 	this.zIndex = z;
@@ -119,12 +119,19 @@ var TextLabel = function (x, y, z, maxWidth, fontSize, text, textalign, color, b
 	this.targetId = targetId;
 	this.targetCanvas = null;
 	this.targetContext = null;
+	this.useTrajan = useTrajan;
 }
 
 TextLabel.prototype.draw = function () {
 	if (this.targetContext)
 	{
-		this.targetContext.font = (this.bold ? 'bold ' : '') + this.fontSize + 'px Garamond';
+		if (this.useTrajan)
+		{
+			this.targetContext.font = this.fontSize + "px Trajan Pro 3";
+		} else {
+			this.targetContext.font = (this.bold ? 'bold ' : '') + this.fontSize + 'px Garamond';
+		}
+		
 		var temporaryFillStyle = this.targetContext.fillStyle;
 		var temporaryAlignment = this.targetContext.textAlign;
 		this.targetContext.textAlign = this.textalign;
