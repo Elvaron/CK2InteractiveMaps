@@ -1,6 +1,8 @@
 # CK2InteractiveMaps
 Interactive Map Renderer based on Crusader Kings 2 by Paradox Interactive
 
+![preview](https://github.com/Elvaron/CK2InteractiveMaps/blob/master/preview.png)
+
 # Copyright
 Image Copyright Paradox Interactive. All rights reserved. Personal use only.
 
