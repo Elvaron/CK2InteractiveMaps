@@ -63,7 +63,7 @@ const pactType = {
 	DEFP: 'Defensive Pact', /* d5 */
 	TRUCE: 'Truce', /* d2 */
 	EMBARGO: 'Embargo', /* d6 */
-	TRADE: 'Trade', /* d7 */
+	TRADE: 'Trade Agreement', /* d7 */
 	PEACE: 'Peace Treaty' /* d4 */
 }
 

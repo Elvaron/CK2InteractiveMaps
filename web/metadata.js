@@ -76,6 +76,10 @@ function Council(liege) {
 	this.chaplain = 0;
 }
 
+Council.prototype.exists = function () {
+	return this.chancellor > 0 || this.marshal > 0 || this.steward > 0 || this.spymaster > 0 || this.chaplain > 0;
+}
+
 function House(name, id) {
 	this.id = id;
 	this.name = name;
@@ -133,6 +137,15 @@ Pact.prototype.getTypeIndex = function () {
 	}
 
 	return 3;
+}
+
+Pact.prototype.getDescription = function () {
+	if (this.characters.length > 1)
+	{
+		return this.type + " between " + getFullName(characterMap.get(this.characters[0])) + " and " + getFullName(characterMap.get(this.characters[1]));
+	}
+
+	return this.type;
 }
 
 Pact.prototype.getImageUrl = function () {

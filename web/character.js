@@ -61,6 +61,40 @@ function getRandomNumber(min, max)
 	return Math.floor( Math.random() * (+max - +min)) + +min;
 }
 
+Character.prototype.getSiblings = function() {
+	var result = [];
+
+	var fatherId = this.getFather();
+	if (fatherId > 0)
+	{
+		var father = characterMap.get(fatherId);
+		for (var i = 0; i < father.children.length; i++)
+		{
+			var child = father.children[i];
+			if (child != this.id && !result.includes(child))
+			{
+				result.push(child);
+			}
+		}
+	}
+
+	var motherId = this.getMother();
+	if (motherId > 0)
+	{
+		var mother = characterMap.get(motherId);
+		for (var i = 0; i < mother.children.length; i++)
+		{
+			var child = mother.children[i];
+			if (child != this.id && !result.includes(child))
+			{
+				result.push(child);
+			}
+		}
+	}
+
+	return result;
+}
+
 Character.prototype.getMother = function () {
 	for (var i = 0; i < this.parents.length; i++)
 	{
@@ -136,6 +170,15 @@ Character.prototype.addVassal = function (id) {
 	{
 		this.vassals.push(id);
 	}
+}
+
+Character.prototype.getImportance = function () {
+	if (!this.hasPrimaryTitle())
+	{
+		return 0;
+	}
+
+	return titles.get(this.primaryTitle).titleImportance;
 }
 
 Character.prototype.hasPrimaryTitle = function () {

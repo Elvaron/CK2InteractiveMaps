@@ -1,3 +1,16 @@
+var ClickableShape = function (minX, minY, maxX, maxY, description, action) {
+	this.minX = minX;
+	this.minY = minY;
+	this.maxX = maxX;
+	this.maxY = maxY;
+	this.description = description;
+	this.action = action;
+}
+
+ClickableShape.prototype.isInShape = function (x, y) {
+	return this.minX <= x && x <= this.maxX && this.minY <= y && y <= this.maxY;
+}
+
 var MouseOverShape = function (minX, minY, maxX, maxY, description) {
 	this.minX = minX;
 	this.minY = minY;
@@ -209,6 +222,10 @@ RenderStack.prototype.addElement = function (element) {
 	this.elements.push(element);
 }
 
+RenderStack.prototype.clear = function () {
+	this.elements = [];
+}
+
 RenderStack.prototype.getImages = function () {
 	var result = [];
 	for (var i = 0; i < this.elements.length; i++)
@@ -273,6 +290,12 @@ function loadRenderStack (renderStack) {
 			}
 		}
 	}
+}
+
+function clearCanvasFromPoint(canvasId, x, y) {
+	targetCanvas = document.getElementById(canvasId);
+	targetContext = targetCanvas.getContext("2d");
+	targetContext.clearRect(x,y,$("#" + canvasId).width() - x,$("#" + canvasId).height() - y);
 }
 
 function clearCanvas(canvasId) {

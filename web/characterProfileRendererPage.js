@@ -1,15 +1,21 @@
 var characterIterator = 1;
 var characterMap = null;
 var globalToolTip = "argh";
+var clicker = null;
+var mover = null;
 
 window.onload = function() {  
 
 	characterMap = new Map();
 	initSampleTitles();
 
+	var helpers = ["helper_1", "helper_2", "helper_3", "helper_4", "helper_5", "helper_6", "helper_7", "helper_8", "helper_9", "helper_10", "helper_11"];
+	var nextHelper = 12;
+
 	// Randomize Character
 	var myCharacter = initSampleCharacter(true);
-	randomizeCharacterTraits(myCharacter);
+	//randomizeCharacterTraits(myCharacter);
+	myCharacter.alive = coinFlip();
 	var female = (myCharacter.gender == gender.FEMALE);
 
 	var titledCharacters = [];
@@ -18,6 +24,7 @@ window.onload = function() {
 	var spouse = initSampleCharacterWithGender(true, female ? gender.MALE : gender.FEMALE);
 	myCharacter.spouse = spouse.id;
 	spouse.spouse = myCharacter.id;
+	spouse.alive = coinFlip();
 	if (spouse.hasPrimaryTitle())
 	{
 		titledCharacters.push(spouse);
@@ -53,7 +60,7 @@ window.onload = function() {
 
 	// Randomize Parents
 	var father = initSampleCharacterWithGender(true, gender.MALE);
-	father.alive = false;
+	father.alive = coinFlip();
 	father.age = getRandomNumber(20, 80);
 	myCharacter.parents.push(father.id);
 	father.children.push(myCharacter.id);
@@ -63,7 +70,7 @@ window.onload = function() {
 	}
 
 	var fatherfather = initSampleCharacterWithGender(true, gender.MALE);
-	fatherfather.alive = false;
+	fatherfather.alive = coinFlip();
 	father.parents.push(fatherfather.id);
 	fatherfather.children.push(father.id);
 	if (fatherfather.hasPrimaryTitle())
@@ -72,7 +79,7 @@ window.onload = function() {
 	}
 
 	var fathermother = initSampleCharacterWithGender(true, gender.FEMALE);
-	fathermother.alive = false;
+	fathermother.alive = coinFlip();
 	father.parents.push(fathermother.id);
 	fathermother.children.push(father.id);
 	if (fathermother.hasPrimaryTitle())
@@ -82,7 +89,7 @@ window.onload = function() {
 
 	var mother = initSampleCharacterWithGender(true, gender.FEMALE);
 	mother.age = getRandomNumber(20, 80);
-	mother.alive = false;
+	mother.alive = coinFlip();
 	myCharacter.parents.push(mother.id);
 	mother.children.push(myCharacter.id);
 	if (mother.hasPrimaryTitle())
@@ -91,7 +98,7 @@ window.onload = function() {
 	}
 
 	var motherfather = initSampleCharacterWithGender(true, gender.MALE);
-	motherfather.alive = false;
+	motherfather.alive = coinFlip();
 	mother.parents.push(motherfather.id);
 	motherfather.children.push(mother.id);
 	if (motherfather.hasPrimaryTitle())
@@ -100,7 +107,7 @@ window.onload = function() {
 	}
 
 	var mothermother = initSampleCharacterWithGender(true, gender.FEMALE);
-	mothermother.alive = false;
+	mothermother.alive = coinFlip();
 	mother.parents.push(mothermother.id);
 	mothermother.children.push(mother.id);
 	if (mothermother.hasPrimaryTitle())
@@ -109,9 +116,9 @@ window.onload = function() {
 	}
 
 	// Randomize Regent
-	if (myCharacter.age < 16)
+	if (myCharacter.age < 16 && myCharacter.alive)
 	{
-		var regent = initSampleCharacter(false);
+		var regent = initSampleCharacter(true);
 		myCharacter.regent = regent.id;
 	}
 
@@ -120,11 +127,24 @@ window.onload = function() {
 
 	for (var i = 0; i < numberOfChildren; i++)
 	{
+		// Randomize Child
 		var child = initSampleCharacter(false);
+		child.alive = getRandomNumber(0, 5) > 2;
 		child.parents.push(myCharacter.id);
 		child.parents.push(spouse.id);
+		child.house = myCharacter.house;
 		spouse.children.push(child.id);
 		myCharacter.children.push(child.id);
+
+		// Create Canvas to render child
+		var myTmpCanvas = document.createElement('canvas');
+		myTmpCanvas.id = "helper_" + nextHelper; // Id
+		nextHelper++; // Increase counter
+		myTmpCanvas.width = 200;
+		myTmpCanvas.height = 200;
+		myTmpCanvas.style.display = "none";
+		document.body.appendChild(myTmpCanvas);
+		helpers.push(myTmpCanvas.id);
 	}
 
 	// Randomize Siblings
@@ -133,6 +153,7 @@ window.onload = function() {
 	for (var i = 0; i < numberOfSiblings; i++)
 	{
 		var sibling = initSampleCharacter(true);
+		sibling.alive = getRandomNumber(0, 3) > 1;
 		sibling.parents.push(father.id);
 		sibling.parents.push(mother.id);
 		father.children.push(sibling.id);
@@ -142,6 +163,16 @@ window.onload = function() {
 		{
 			titledCharacters.push(sibling);
 		}
+
+		// Create Canvas to render sibling
+		var myTmpCanvas = document.createElement('canvas');
+		myTmpCanvas.id = "helper_" + nextHelper; // Id
+		nextHelper++; // Increase counter
+		myTmpCanvas.width = 200;
+		myTmpCanvas.height = 200;
+		myTmpCanvas.style.display = "none";
+		document.body.appendChild(myTmpCanvas);
+		helpers.push(myTmpCanvas.id);
 	}
 
 	// Randomize Vassals
@@ -156,6 +187,58 @@ window.onload = function() {
 		if (vassal.hasPrimaryTitle())
 		{
 			titledCharacters.push(vassal);
+		}
+
+		// Create Canvas to render vassal
+		var myTmpCanvas = document.createElement('canvas');
+		myTmpCanvas.id = "helper_" + nextHelper; // Id
+		nextHelper++; // Increase counter
+		myTmpCanvas.width = 200;
+		myTmpCanvas.height = 200;
+		myTmpCanvas.style.display = "none";
+		document.body.appendChild(myTmpCanvas);
+		helpers.push(myTmpCanvas.id);
+	}
+
+	// Randomize Council
+	if (myCharacter.vassals.length > 0)
+	{
+		var picked = [];
+
+		var chancellor = getRandomNumber(0, myCharacter.vassals.length);
+		var myChancellor = myCharacter.vassals[chancellor];
+		myCharacter.council.chancellor = myChancellor;
+		picked.push(myChancellor);
+
+		var marshal = getRandomNumber(0, myCharacter.vassals.length);
+		var myMarshal = myCharacter.vassals[marshal];
+		if (!picked.includes(myMarshal))
+		{
+			myCharacter.council.marshal = myMarshal;
+			picked.push(myMarshal);
+		}
+
+		var steward = getRandomNumber(0, myCharacter.vassals.length);
+		var mySteward = myCharacter.vassals[steward];
+		if (!picked.includes(mySteward))
+		{
+			myCharacter.council.steward = mySteward;
+			picked.push(mySteward);
+		}
+
+		var spymaster = getRandomNumber(0, myCharacter.vassals.length);
+		var mySpymaster = myCharacter.vassals[spymaster];
+		if (!picked.includes(mySpymaster))
+		{
+			myCharacter.council.spymaster = mySpymaster;
+			picked.push(mySpymaster);
+		}
+
+		var chaplain = getRandomNumber(0, myCharacter.vassals.length);
+		var myChaplain = myCharacter.vassals[chaplain];
+		if (!picked.includes(myChaplain))
+		{
+			myCharacter.council.chaplain = myChaplain;
 		}
 	}
 
@@ -190,45 +273,84 @@ window.onload = function() {
 	}
 	
 	//var taskOne = renderCharacterPortrait(myCharacter, [0,0,0], "province");
-	var helpers = ["helper_1", "helper_2", "helper_3", "helper_4", "helper_5", "helper_6", "helper_7", "helper_8", "helper_9", "helper_10"];
-	var tasks = renderCharacter(myCharacter, [0,0,0], "profile", helpers);
 	var renderStack = new RenderStack();
-	for (var i = 0; i < tasks.length; i++)
+	renderCharacter(myCharacter, [0,0,0], renderStack, "profile", helpers);
+	
+	/*for (var i = 0; i < tasks.length; i++)
 	{
 		renderStack.addElements(tasks[i]);
-	}
+	}*/
 
-	loadRenderStack(renderStack);
+	renderStack.callback = function () {
+		document.getElementById("loadingScreen").style.display = "none";
+		document.getElementById("profile").style.display = "block";
 
-	if (mouseOverAreas && mouseOverAreas.length > 0)
-	{
-		var c = document.getElementById("profile");
-		var cX = c.offsetLeft;
-		var cY = c.offsetTop;
+		if (mouseOverAreas && mouseOverAreas.length > 0)
+		{
+			var c = document.getElementById("profile");
+			var cX = c.offsetLeft;
+			var cY = c.offsetTop;
 
-		var minMaxBounds = getMinMaxBounds(mouseOverAreas);
+			var minMaxClickableBounds = getMinMaxBounds(clickableAreas);
+			var minMaxBounds = getMinMaxBounds(mouseOverAreas);
 
-		c.addEventListener('mousemove', function(event) {
-			var cursorX = event.pageX - cX;
-			var cursorY = event.pageY - cY;
+			clicker = function (event) {
+				var cursorX = event.pageX - cX;
+				var cursorY = event.pageY - cY;
 
-			$("#profile").attr("title", "");
-
-			if (!minMaxBounds.isInShape(cursorX,cursorY))
-			{
-				return;
-			}
-
-			for (var i = 0; i < mouseOverAreas.length; i++) {
-				if (mouseOverAreas[i].isInShape(cursorX,cursorY))
+				if (!minMaxClickableBounds.isInShape(cursorX,cursorY))
 				{
-					$("#profile").attr("title", mouseOverAreas[i].description);
-					//alert(mouseOverAreas[i].description);
-					break;
+					return;
 				}
+
+				for (var i = 0; i < clickableAreas.length; i++) {
+					if (clickableAreas[i].isInShape(cursorX,cursorY))
+					{
+						//alert(clickableAreas[i].description);
+						if (clickableAreas[i].action)
+						{
+							clickableAreas[i].action();
+						}
+
+						break;
+					}
+				}
+			};
+
+			mover = function (event) {
+				var cursorX = event.pageX - cX;
+				var cursorY = event.pageY - cY;
+
+				$("#profile").attr("title", "");
+
+				if (!minMaxBounds.isInShape(cursorX,cursorY))
+				{
+					return;
+				}
+
+				for (var i = 0; i < mouseOverAreas.length; i++) {
+					if (mouseOverAreas[i].isInShape(cursorX,cursorY))
+					{
+						$("#profile").attr("title", mouseOverAreas[i].description);
+						//alert(mouseOverAreas[i].description);
+						break;
+					}
+				}
+			};
+
+			if (clicker)
+			{
+				c.addEventListener('click', clicker, true);
 			}
-		}, false);
-	}
+
+			if (mover) 
+			{
+				c.addEventListener('mousemove', mover, false);
+			}
+		}
+	};
+
+	//loadRenderStack(renderStack);
 
 	/*$( document ).tooltip({
 		//track: true

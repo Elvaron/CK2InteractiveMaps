@@ -71,6 +71,8 @@ function initSampleCharacter(randomizeTitle)
 		newRandomTitle(importance, myCharacter, true);
 	}
 
+	randomizeCharacterTraits(myCharacter);
+
 	return myCharacter;
 }
 
@@ -164,7 +166,7 @@ function initSampleTitles()
 		sampleTitles.push("Vogelfrei");
 		sampleTitles.push("Weizenstrand");
 		sampleTitles.push("Zankbräu");
-
+		
 		sampleTitleClaims.push("Attenweiler");
 		sampleTitleClaims.push("Bad Ilex");
 		sampleTitleClaims.push("Donnerfeste");
@@ -188,6 +190,12 @@ function initSampleTitles()
 		sampleTitleClaims.push("Vogelfrei");
 		sampleTitleClaims.push("Weizenstrand");
 		sampleTitleClaims.push("Zankbräu");
+
+		for (var i = 1; i < 162; i++)
+		{
+			sampleTitles.push(i.toString());
+			sampleTitleClaims.push(i.toString());
+		}
 	}
 }
 

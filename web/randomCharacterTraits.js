@@ -214,7 +214,7 @@ function randomizeCharacterTraits(character) {
 		if (ageBased < ageFactor)
 		{
 			// Incapable
-			character.traits.push(32);	
+			character.addTrait(32);	
 		}
 		else if (ageBased < (ageFactor * 2))
 		{

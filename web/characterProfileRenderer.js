@@ -1,12 +1,43 @@
 var mouseOverAreas = [];
+var clickableAreas = [];
 
-function renderCharacter(myCharacter, offset, targetCanvas, helperCanvases)
+function clearEvents(targetCanvas)
 {
+	var c = document.getElementById(targetCanvas);
+	if (clicker)
+	{
+		c.removeEventListener('click', clicker, true);
+	}
+
+	if (mover)
+	{
+		c.removeEventListener('mousemove', mover, false);
+	}
+
+	clicker = null;
+	mover = null;
+}
+
+function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperCanvases)
+{
+	clearCanvas(targetCanvas);
+	clearEvents(targetCanvas);
+	mouseOverAreas = [];
+	clickableAreas = [];
+	renderStack.clear();
+
 	var elements = [[]];
 
 	var helperCanvasIterator = 0;
 
 	var traits = GetTraits();
+
+	/*
+		Large Skulls
+		Myself:	186,197,32,32
+		Spouse: 298,204,32,32
+
+	*/
 
 	// -------------------------------------- BACKGROUND --------------------------------------
 
@@ -45,10 +76,18 @@ function renderCharacter(myCharacter, offset, targetCanvas, helperCanvases)
 		elements.push( new RenderedImage(201, 115, 400, 133, 133, helperCanvases[helperCanvasIterator], targetCanvas) );
 		helperCanvasIterator++;
 
-		mouseOverAreas.push( new MouseOverShape(offset[0] + 215, offset[1] + 115, offset[0] + 360, offset[1] + 248, getFullName(spouse)) );
+		mouseOverAreas.push( new MouseOverShape(offset[0] + 201, offset[1] + 115, offset[0] + 201 + 133, offset[1] + 115 + 133, getFullName(spouse)) );
+		clickableAreas.push( new ClickableShape(offset[0] + 201, offset[1] + 115, offset[0] + 201 + 133, offset[1] + 115 + 133, "Spouse", function () {
+			renderCharacter(spouse, offset, renderStack, targetCanvas, helperCanvases);
+		}));
 
 		elements[0].push( new Shape(offset[0] + 217, offset[1] + 128, offset[2] + 500, "profile/frame_spouse.png", 102, 106, targetCanvas));
 		elements[0].push( new Shape(offset[0] + 215, offset[1] + 219, offset[2] + 501, "profile/scroll_spouse.png", 106, 30, targetCanvas));
+
+		if (!spouse.alive)
+		{
+			elements[0].push( new Shape(offset[0] + 297, offset[1] + 218, offset[2] + 502, "portrait/skull_large.png", 32, 32, targetCanvas));
+		}
 
 		var spouseText = (spouse.age < 16 || myCharacter.age < 16) ? "Betrothed" : (spouse.gender == gender.FEMALE ? "Wife" : "Husband");
 
@@ -59,6 +98,11 @@ function renderCharacter(myCharacter, offset, targetCanvas, helperCanvases)
 	var portraitElements = renderCharacterPortrait(myCharacter, [50,60,10], targetCanvas, false, true);
 	elements[0] = elements[0].concat(portraitElements);
 
+	if (!myCharacter.alive)
+	{
+		elements[0].push( new Shape(offset[0] + 188, offset[1] + 207, offset[2] + 750, "portrait/skull_large.png", 32, 32, targetCanvas));
+	}
+
 	// -------------------------------------- HOUSE SHIELD --------------------------------------
 	var houseName = "Lowborn";
 	if (myCharacter.house > 0 && houses.has(myCharacter.house))
@@ -66,6 +110,7 @@ function renderCharacter(myCharacter, offset, targetCanvas, helperCanvases)
 		var house = houses.get(myCharacter.house);
 		houseName = house.name;
 		elements[0].push( new Shape(offset[0] + 347, offset[1] + 78, offset[2] + 4, getHouseImage(house), 80, 84, targetCanvas));
+		mouseOverAreas.push( new MouseOverShape(offset[0] + 347, offset[1] + 78, offset[0] + 347 + 80, offset[1] + 78 + 84, "House " + houseName) );
 	}
 
 	elements[0].push( new TextLabel(offset[0] + 384, offset[1] + 63, offset[2] + 5, 150, 16, houseName, "center", "black", true, targetCanvas));
@@ -201,6 +246,11 @@ function renderCharacter(myCharacter, offset, targetCanvas, helperCanvases)
 		elements[0].push( new Shape(offset[0] + 224, offset[1] + 99, offset[2] + 600, "profile/scroll_heir.png", 88, 30, targetCanvas));
 		elements[0].push( new TextLabel(offset[0] + 268, offset[1] + 117, 610, 170, 16, "Liege", "center", "black", true, targetCanvas) );
 
+		mouseOverAreas.push( new MouseOverShape(offset[0] + 231, offset[1] + 48, offset[0] + 231 + 74, offset[1] + 48 + 74, getFullName(liege)) );
+		clickableAreas.push( new ClickableShape(offset[0] + 231, offset[1] + 48, offset[0] + 231 + 74, offset[1] + 48 + 74, "Liege", function () {
+			renderCharacter(liege, offset, renderStack, targetCanvas, helperCanvases);
+		}));
+
 		if (liege.hasPrimaryTitle())
 		{
 			var liegeTitle = titles.get(liege.primaryTitle);
@@ -210,7 +260,7 @@ function renderCharacter(myCharacter, offset, targetCanvas, helperCanvases)
 			elements[0].push( new Shape(offset[0] + 214, offset[1] + 70, offset[2] + 620, titleImages[0], 35, 37, targetCanvas));
 			elements[0].push( new Shape(offset[0] + 214, offset[1] + 70, offset[2] + 622, titleImages[1], 35, 37, targetCanvas));
 			elements[0].push( new Shape(offset[0] + 216, offset[1] + 46, offset[2] + 630, crownImages[0], 30, 30, targetCanvas));
-			elements[0].push( new Shape(offset[0] + 216, offset[1] + 46, offset[2] + 632, crownImages[1], 30, 30, targetCanvas));
+			elements[0].push( new Shape(offset[0] + 216, offset[1] + 46, offset[2] + 632, crownImages[1], 30, 30, targetCanvas));			
 		}
 
 		// Shield: 214,70,35,37
@@ -228,6 +278,15 @@ function renderCharacter(myCharacter, offset, targetCanvas, helperCanvases)
 		elements[0].push( new Shape(offset[0] + 10, offset[1] + 140, offset[2] + 626, titleImages[1], 80, 84, targetCanvas));
 		elements[0].push( new Shape(offset[0] + 17, offset[1] + 88, offset[2] + 634, crownImages[0], 64, 64, targetCanvas));
 		elements[0].push( new Shape(offset[0] + 17, offset[1] + 88, offset[2] + 636, crownImages[1], 64, 64, targetCanvas));
+
+		mouseOverAreas.push( new MouseOverShape(offset[0] + 10, offset[1] + 88, offset[0] + 10 + 80, offset[1] + 140 + 84, getTitleMouseOverText(renderTitle)) );
+		if (renderTitle.owner > 0 && characterMap.has(renderTitle.owner))
+		{
+			var titleOwner = characterMap.get(renderTitle.owner);
+			clickableAreas.push( new ClickableShape(offset[0] + 10, offset[1] + 88, offset[0] + 10 + 80, offset[1] + 140 + 84, "Title Owner", function () {
+				renderCharacter(titleOwner, offset, renderStack, targetCanvas, helperCanvases);
+			}));
+		}
 	}
 
 	// -------------------------------------- Heir --------------------------------------
@@ -239,12 +298,34 @@ function renderCharacter(myCharacter, offset, targetCanvas, helperCanvases)
 		elements.push( new RenderedImage(69, 210, 700, 70, 70, helperCanvases[helperCanvasIterator], targetCanvas) );
 		helperCanvasIterator++;
 
-		//mouseOverAreas.push( new MouseOverShape(offset[0] + 215, offset[1] + 115, offset[0] + 360, offset[1] + 248, getFullName(spouse)) );
+		mouseOverAreas.push( new MouseOverShape(offset[0] + 75, offset[1] + 215, offset[0] + 75 + 60, offset[1] + 215 + 60, getFullName(heir)) );
+		clickableAreas.push( new ClickableShape(offset[0] + 75, offset[1] + 215, offset[0] + 75 + 60, offset[1] + 215 + 60, "Heir", function () {
+			renderCharacter(heir, offset, renderStack, targetCanvas, helperCanvases);
+		}));
 
 		elements[0].push( new Shape(offset[0] + 76, offset[1] + 215, offset[2] + 800, "profile/frame_heir.png", 59, 49, targetCanvas));
 		elements[0].push( new Shape(offset[0] + 61, offset[1] + 259, offset[2] + 801, "profile/scroll_heir.png", 88, 30, targetCanvas));
 
 		elements[0].push( new TextLabel(offset[0] + 105, offset[1] + 277, 810, 170, 16, "Heir", "center", "black", true, targetCanvas) );
+	}
+
+	// -------------------------------------- Regent --------------------------------------
+	if (myCharacter.regent > 0 && characterMap.has(myCharacter.regent))
+	{
+		var regent = characterMap.get(myCharacter.regent);
+
+		elements.push( renderCharacterPortrait(regent, [0,0,0], helperCanvases[helperCanvasIterator], false, true) );
+		elements.push( new RenderedImage(153, 210, 750, 70, 70, helperCanvases[helperCanvasIterator], targetCanvas) );
+		helperCanvasIterator++;
+
+		mouseOverAreas.push( new MouseOverShape(offset[0] + 158, offset[1] + 215, offset[0] + 158 + 60, offset[1] + 215 + 60, getFullName(regent)) );
+		clickableAreas.push( new ClickableShape(offset[0] + 158, offset[1] + 215, offset[0] + 158 + 60, offset[1] + 215 + 60, "Regent", function () {
+			renderCharacter(regent, offset, renderStack, targetCanvas, helperCanvases);
+		}));
+
+		elements[0].push( new Shape(offset[0] + 145, offset[1] + 259, offset[2] + 803, "profile/scroll_heir.png", 88, 30, targetCanvas));
+
+		elements[0].push( new TextLabel(offset[0] + 189, offset[1] + 277, 810, 170, 16, "Regent", "center", "black", true, targetCanvas) );
 	}
 
 	// -------------------------------------- Held Titles --------------------------------------
@@ -294,6 +375,7 @@ function renderCharacter(myCharacter, offset, targetCanvas, helperCanvases)
 			elements[0].push( new Shape(xPos + 1, yPos - 20, offset[2] + 647 + titleIterator, crownImages[1], 24, 24, targetCanvas));
 
 			mouseOverAreas.push( new MouseOverShape(xPos, yPos - 20, xPos + mouseOverWidth, yPos + 51, getTitleMouseOverText(title)) );
+
 		}
 	}
 
@@ -345,10 +427,30 @@ function renderCharacter(myCharacter, offset, targetCanvas, helperCanvases)
 			elements[0].push( new Shape(xPos + 1, yPos - 19, offset[2] + 648 + titleIterator, crownImages[1], 22, 22, targetCanvas));
 
 			mouseOverAreas.push( new MouseOverShape(xPos, yPos - 20, xPos + mouseOverWidth, yPos + 51, getTitleMouseOverText(title)) );
+			if (title.owner > 0 && title.owner != myCharacter.id)
+			{
+				var titleOwner = characterMap.get(title.owner);
+
+				clickableAreas.push( new ClickableShape(xPos, yPos - 20, xPos + mouseOverWidth, yPos + 51, "Title Owner", function () {
+					renderCharacter(titleOwner, offset, renderStack, targetCanvas, helperCanvases);
+				}));
+			}			
 		}
 	}
 
-	// -------------------------------------- Title Claims --------------------------------------
+	// -------------------------------------- Council -------------------------------------------
+	if (myCharacter.council.exists())
+	{
+		// 344,262,87,24
+		elements[0].push( new Shape(offset[0] + 344, offset[1] + 262, offset[2] + 610, "profile/has_council.png", 87, 24, targetCanvas));
+		mouseOverAreas.push( new MouseOverShape(offset[0] + 344, offset[1] + 262, offset[0] + 344 + 87, offset[1] + 262 + 24, "View council") );
+		clickableAreas.push( new ClickableShape(offset[0] + 344, offset[1] + 262, offset[0] + 344 + 87, offset[1] + 262 + 24, "Council Button", function () {
+			drawCouncil();
+		}));
+	}
+
+
+	// -------------------------------------- Pacts --------------------------------------
 	if (myCharacter.pacts.length > 0)
 	{
 		myCharacter.pacts.sort(function (a,b) {
@@ -414,7 +516,10 @@ function renderCharacter(myCharacter, offset, targetCanvas, helperCanvases)
 			elements[0].push( new Shape(xPos, yPos, offset[2] + 650 + pactUsedIterator, titleImages[0], 22, 23, targetCanvas));
 			elements[0].push( new Shape(xPos, yPos, offset[2] + 652 + pactUsedIterator, titleImages[1], 22, 23, targetCanvas));
 
-			//mouseOverAreas.push( new MouseOverShape(xPos, yPos - 20, xPos + mouseOverWidth, yPos + 51, getTitleMouseOverText(title)) );
+			mouseOverAreas.push( new MouseOverShape(xPos, yPos, xPos + mouseOverWidth, yPos + 17 + 24, pact.getDescription()) );
+			clickableAreas.push( new ClickableShape(xPos, yPos, xPos + mouseOverWidth, yPos + 17 + 24, "Pact Partner", function () {
+				renderCharacter(otherCharacter, offset, renderStack, targetCanvas, helperCanvases);
+			}));
 
 			pactUsedIterator++;
 		}
@@ -428,15 +533,25 @@ function renderCharacter(myCharacter, offset, targetCanvas, helperCanvases)
 		var pit = 0;
 		var parentPositions = [[50,426], [114,426]];
 
-		var grandParentPositions = [[[220,426], [255,426]],[[280,426],[315,426]]];
+		var grandParentPositions = [[[220,426], [290,426]],[[360,426],[430,426]]];
+		var pOuter = 0; // Whether the first set of grandparents exists
+		var pInner = 0; // Whether the father exists
 
 		// Render First
 		if (fatherId > 0)
 		{
+			var xPos = offset[0] + parentPositions[pit][0];
+			var yPos = offset[1] + parentPositions[pit][1];
+
 			var father = characterMap.get(fatherId);
 			elements.push( renderCharacterPortrait(father, [0,0,0], helperCanvases[helperCanvasIterator], false, true) );
-			elements.push( new RenderedImage(parentPositions[pit][0], parentPositions[pit][1], 1100, 70, 70, helperCanvases[helperCanvasIterator], targetCanvas) );
-			helperCanvasIterator++;	
+			elements.push( new RenderedImage(xPos, yPos, offset[2] + 1100, 70, 70, helperCanvases[helperCanvasIterator], targetCanvas) );
+			helperCanvasIterator++;
+
+			mouseOverAreas.push( new MouseOverShape(xPos, yPos, xPos + 70, yPos + 70, getFullName(father)) );
+			clickableAreas.push( new ClickableShape(xPos, yPos, xPos + 70, yPos + 70, "Father", function () {
+				renderCharacter(father, offset, renderStack, targetCanvas, helperCanvases);
+			}));
 
 			if (!father.alive)
 			{
@@ -444,27 +559,315 @@ function renderCharacter(myCharacter, offset, targetCanvas, helperCanvases)
 			}
 
 			// -------------------------------------- Grandparents Father Side --------------------------------------
+			var grandfatherId = father.getFather();
+			var grandmotherId = father.getMother();
+
+			if (grandfatherId > 0)
+			{
+				var xPos = offset[0] + grandParentPositions[pOuter][pInner][0];
+				var yPos = offset[1] + grandParentPositions[pOuter][pInner][1];
+
+				var grandfather = characterMap.get(grandfatherId);
+				elements.push( renderCharacterPortrait(grandfather, [0,0,0], helperCanvases[helperCanvasIterator], false, true) );
+				elements.push( new RenderedImage(xPos, yPos, offset[2] + 1200, 70, 70, helperCanvases[helperCanvasIterator], targetCanvas) );
+				helperCanvasIterator++;	
+
+				if (!grandfather.alive)
+				{
+					elements.push( new Shape(xPos + 9, yPos + 40, offset[2] + 1310, "portrait/skull.png", 28, 28, targetCanvas));
+				}
+
+				mouseOverAreas.push( new MouseOverShape(xPos, yPos, xPos + 70, yPos + 70, getFullName(grandfather)) );
+				clickableAreas.push( new ClickableShape(xPos, yPos, xPos + 70, yPos + 70, "Grandfather", function () {
+					renderCharacter(grandfather, offset, renderStack, targetCanvas, helperCanvases);
+				}));
+
+				pInner = 1;
+			}
+
+			if (grandmotherId > 0)
+			{
+				var xPos = offset[0] + grandParentPositions[pOuter][pInner][0];
+				var yPos = offset[1] + grandParentPositions[pOuter][pInner][1];
+
+				var grandmother = characterMap.get(grandmotherId);
+				elements.push( renderCharacterPortrait(grandmother, [0,0,0], helperCanvases[helperCanvasIterator], false, true) );
+				elements.push( new RenderedImage(xPos, yPos, offset[2] + 1250, 70, 70, helperCanvases[helperCanvasIterator], targetCanvas) );
+				helperCanvasIterator++;	
+
+				if (!grandmother.alive)
+				{
+					elements.push( new Shape(xPos + 9, yPos + 40, offset[2] + 1320, "portrait/skull.png", 28, 28, targetCanvas));
+				}
+
+				mouseOverAreas.push( new MouseOverShape(xPos, yPos, xPos + 70, yPos + 70, getFullName(grandmother)) );
+				clickableAreas.push( new ClickableShape(xPos, yPos, xPos + 70, yPos + 70, "Grandmother", function () {
+					renderCharacter(grandmother, offset, renderStack, targetCanvas, helperCanvases);
+				}));
+
+				pInner = 1;
+			}
+
+			if (pInner > 0)
+			{
+				pOuter = 1;
+				pInner = 0;
+			}
 
 			pit++;
 		}
 
 		if (motherId > 0)
 		{
+			var xPos = offset[0] + parentPositions[pit][0];
+			var yPos = offset[1] + parentPositions[pit][1];
+
 			var mother = characterMap.get(motherId);
 			elements.push( renderCharacterPortrait(mother, [0,0,0], helperCanvases[helperCanvasIterator], false, true) );
-			elements.push( new RenderedImage(parentPositions[pit][0], parentPositions[pit][1], 1200, 70, 70, helperCanvases[helperCanvasIterator], targetCanvas) );
+			elements.push( new RenderedImage(xPos, yPos, 1200, 70, 70, helperCanvases[helperCanvasIterator], targetCanvas) );
 			helperCanvasIterator++;
 
 			if (!mother.alive)
 			{
-				elements.push( new Shape(offset[0] + parentPositions[pit][0] + 9, offset[1] + parentPositions[pit][1] + 40, offset[2] + 1300, "portrait/skull.png", 28, 28, targetCanvas));
+				elements.push( new Shape(xPos + 9, yPos + 40, offset[2] + 1300, "portrait/skull.png", 28, 28, targetCanvas));
 			}
 
+			mouseOverAreas.push( new MouseOverShape(xPos, yPos, xPos + 70, yPos + 70, getFullName(mother)) );
+			clickableAreas.push( new ClickableShape(xPos, yPos, xPos + 70, yPos + 70, "Mother", function () {
+				renderCharacter(mother, offset, renderStack, targetCanvas, helperCanvases);
+			}));
+
 			// -------------------------------------- Grandparents Mother Side --------------------------------------
+			var grandfatherId = mother.getFather();
+			var grandmotherId = mother.getMother();
+
+			if (grandfatherId > 0)
+			{
+				var xPos = offset[0] + grandParentPositions[pOuter][pInner][0];
+				var yPos = offset[1] + grandParentPositions[pOuter][pInner][1];
+
+				var grandfather = characterMap.get(grandfatherId);
+				elements.push( renderCharacterPortrait(grandfather, [0,0,0], helperCanvases[helperCanvasIterator], false, true) );
+				elements.push( new RenderedImage(xPos, yPos, offset[2] + 1400, 70, 70, helperCanvases[helperCanvasIterator], targetCanvas) );
+				helperCanvasIterator++;	
+
+				if (!grandfather.alive)
+				{
+					elements.push( new Shape(xPos + 9, yPos + 40, offset[2] + 1510, "portrait/skull.png", 28, 28, targetCanvas));
+				}
+
+				mouseOverAreas.push( new MouseOverShape(xPos, yPos, xPos + 70, yPos + 70, getFullName(grandfather)) );
+				clickableAreas.push( new ClickableShape(xPos, yPos, xPos + 70, yPos + 70, "Grandfather", function () {
+					renderCharacter(grandfather, offset, renderStack, targetCanvas, helperCanvases);
+				}));
+
+				pInner = 1;
+			}
+
+			if (grandmotherId > 0)
+			{
+				var xPos = offset[0] + grandParentPositions[pOuter][pInner][0];
+				var yPos = offset[1] + grandParentPositions[pOuter][pInner][1];
+
+				var grandmother = characterMap.get(grandmotherId);
+				elements.push( renderCharacterPortrait(grandmother, [0,0,0], helperCanvases[helperCanvasIterator], false, true) );
+				elements.push( new RenderedImage(xPos, yPos, offset[2] + 1450, 70, 70, helperCanvases[helperCanvasIterator], targetCanvas) );
+				helperCanvasIterator++;
+
+				if (!grandmother.alive)
+				{
+					elements.push( new Shape(xPos + 9, yPos + 40, offset[2] + 1520, "portrait/skull.png", 28, 28, targetCanvas));
+				}
+
+				mouseOverAreas.push( new MouseOverShape(xPos, yPos, xPos + 70, yPos + 70, getFullName(grandmother)) );
+				clickableAreas.push( new ClickableShape(xPos, yPos, xPos + 70, yPos + 70, "Grandmother", function () {
+					renderCharacter(grandmother, offset, renderStack, targetCanvas, helperCanvases);
+				}));
+
+				pInner = 1;
+			}
 		}
 	}
 
-	return elements;
+	// -------------------------------------- Children --------------------------------------
+	if (myCharacter.children.length > 0)
+	{
+		myCharacter.children.sort(function (a,b) {
+			return characterMap.get(b).age - characterMap.get(a).age;
+		});
+
+		var idealDistance = 2;
+		var iconWidth = 55;
+		var widthOffset = iconWidth + idealDistance;
+		var availableSpace = 240;
+		var maxNumberWithoutOverlay = Math.floor(availableSpace / widthOffset);
+
+		if (myCharacter.children.length > maxNumberWithoutOverlay)
+		{
+			widthOffset = Math.floor(availableSpace / myCharacter.children.length);
+		}
+
+		// If widthOffset is less than 24 we get overlap
+		var mouseOverWidth = iconWidth;
+		if (widthOffset < iconWidth)
+		{
+			mouseOverWidth = widthOffset;
+		}
+
+		for (var childIterator = 0; childIterator < myCharacter.children.length; childIterator++)
+		{
+			var childId = myCharacter.children[childIterator];
+			var child = characterMap.get(childId);
+
+			var xOffset = 30 + (widthOffset * childIterator);
+			var xPos = offset[0] + xOffset;
+			var yPos = offset[1] + 518;
+			var zPos = offset[2] + 1600 + (100 * childIterator);
+
+			elements.push( renderCharacterPortrait(child, [0,0,0], helperCanvases[helperCanvasIterator], false, true) );
+			elements.push( new RenderedImage(xPos, yPos, zPos, 70, 70, helperCanvases[helperCanvasIterator], targetCanvas) );
+			helperCanvasIterator++;
+
+			if (!child.alive)
+			{
+				elements.push( new Shape(xPos + 9, yPos + 40, zPos + 50, "portrait/skull.png", 28, 28, targetCanvas));
+			}
+
+			mouseOverAreas.push( new MouseOverShape(xPos, yPos, xPos + mouseOverWidth, yPos + 70, getFullName(child)) );
+			clickableAreas.push( new ClickableShape(xPos, yPos, xPos + mouseOverWidth, yPos + 70, "Child", function () {
+				renderCharacter(child, offset, renderStack, targetCanvas, helperCanvases);
+			}));
+		}
+	}
+
+	// -------------------------------------- Siblings --------------------------------------
+	var siblings = myCharacter.getSiblings();
+
+	if (siblings.length > 0)
+	{
+		siblings.sort(function (a,b) {
+			return characterMap.get(b).age - characterMap.get(a).age;
+		});
+
+		var idealDistance = 2;
+		var iconWidth = 55;
+		var widthOffset = iconWidth + idealDistance;
+		var availableSpace = 130;
+		var maxNumberWithoutOverlay = Math.floor(availableSpace / widthOffset);
+
+		if (siblings.length > maxNumberWithoutOverlay)
+		{
+			widthOffset = Math.floor(availableSpace / siblings.length);
+		}
+
+		// If widthOffset is less than 24 we get overlap
+		var mouseOverWidth = iconWidth;
+		if (widthOffset < iconWidth)
+		{
+			mouseOverWidth = widthOffset;
+		}
+
+		for (var siblingIterator = 0; siblingIterator < siblings.length; siblingIterator++)
+		{
+			var siblingId = siblings[siblingIterator];
+			var sibling = characterMap.get(siblingId);
+
+			var xOffset = 334 + (widthOffset * siblingIterator);
+			var xPos = offset[0] + xOffset;
+			var yPos = offset[1] + 518;
+			var zPos = offset[2] + 2600 + (100 * siblingIterator);
+
+			elements.push( renderCharacterPortrait(sibling, [0,0,0], helperCanvases[helperCanvasIterator], false, true) );
+			elements.push( new RenderedImage(xPos, yPos, zPos, 70, 70, helperCanvases[helperCanvasIterator], targetCanvas) );
+			helperCanvasIterator++;
+
+			if (!sibling.alive)
+			{
+				elements.push( new Shape(xPos + 9, yPos + 40, zPos + 50, "portrait/skull.png", 28, 28, targetCanvas));
+			}
+
+			mouseOverAreas.push( new MouseOverShape(xPos, yPos, xPos + mouseOverWidth, yPos + 70, getFullName(sibling)) );
+			clickableAreas.push( new ClickableShape(xPos, yPos, xPos + mouseOverWidth, yPos + 70, "Sibling", function () {
+				renderCharacter(sibling, offset, renderStack, targetCanvas, helperCanvases);
+			}));
+		}
+	}
+
+	if (myCharacter.vassals.length > 0)
+	{
+		myCharacter.vassals.sort(function (a,b) {
+			return characterMap.get(b).getImportance() - characterMap.get(a).getImportance();
+		});
+
+		var idealDistance = 5;
+		var iconWidth = 55;
+		var widthOffset = iconWidth + idealDistance;
+		var availableSpace = 450;
+		var maxNumberWithoutOverlay = Math.floor(availableSpace / widthOffset);
+
+		if (myCharacter.vassals.length > maxNumberWithoutOverlay)
+		{
+			widthOffset = Math.floor(availableSpace / myCharacter.vassals.length);
+		}
+
+		// If widthOffset is less than 24 we get overlap
+		var mouseOverWidth = iconWidth;
+		if (widthOffset < iconWidth)
+		{
+			mouseOverWidth = widthOffset;
+		}
+
+		for (var vassalIterator = 0; vassalIterator < myCharacter.vassals.length; vassalIterator++)
+		{
+			var vassalId = myCharacter.vassals[vassalIterator];
+			var vassal = characterMap.get(vassalId);
+
+			var xOffset = 30 + (widthOffset * vassalIterator);
+			var xPos = offset[0] + xOffset;
+			var yPos = offset[1] + 610;
+			var zPos = offset[2] + 3600 + (100 * vassalIterator);
+
+			elements.push( renderCharacterPortrait(vassal, [0,0,0], helperCanvases[helperCanvasIterator], false, true) );
+			elements.push( new RenderedImage(xPos, yPos, zPos, 70, 70, helperCanvases[helperCanvasIterator], targetCanvas) );
+			helperCanvasIterator++;
+
+			if (!vassal.alive)
+			{
+				elements.push( new Shape(xPos + 9, yPos + 40, zPos + 50, "portrait/skull.png", 28, 28, targetCanvas));
+			}
+
+			mouseOverAreas.push( new MouseOverShape(xPos, yPos, xPos + mouseOverWidth, yPos + 70, getFullName(vassal)) );
+			clickableAreas.push( new ClickableShape(xPos, yPos, xPos + mouseOverWidth, yPos + 70, "Vassal", function () {
+				renderCharacter(vassal, offset, renderStack, targetCanvas, helperCanvases);
+			}));
+		}
+	}
+
+	for (var i = 0; i < elements.length; i++)
+	{
+		renderStack.addElements(elements[i]);
+	}
+
+	loadRenderStack(renderStack);
+
+	//return elements;
+}
+
+var councilVisible = false;
+
+function drawCouncil ()
+{
+	if (councilVisible)
+	{
+		clearCanvasFromPoint("profile", 549, 0);
+		councilVisible = false;
+		return;
+	}
+
+	councilVisible = true;
+	var renderStack = new RenderStack();
+	renderStack.addElement(new Shape(549, 0, 0, "council/bg.png", 260, 540, "profile"));
+	loadRenderStack(renderStack);
 }
 
 /*
