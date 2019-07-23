@@ -91,9 +91,7 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 		helperCanvasIterator++;
 
 		mouseOverAreas.push( new MouseOverShape(offset[0] + 201, offset[1] + 115, offset[0] + 201 + 133, offset[1] + 115 + 133, getFullName(spouse)) );
-		clickableAreas.push( new ClickableShape(offset[0] + 201, offset[1] + 115, offset[0] + 201 + 133, offset[1] + 115 + 133, "Spouse", function () {
-			renderCharacter(spouse, offset, renderStack, targetCanvas, helperCanvases);
-		}));
+		clickableAreas.push( new ClickableShape(offset[0] + 201, offset[1] + 115, offset[0] + 201 + 133, offset[1] + 115 + 133, "Spouse", makeCharacterRenderFunc(spouse, offset, renderStack, targetCanvas, helperCanvases)));
 
 		elements[0].push( new Shape(offset[0] + 217, offset[1] + 128, offset[2] + 500, "profile/frame_spouse.png", 102, 106, targetCanvas));
 		elements[0].push( new Shape(offset[0] + 215, offset[1] + 219, offset[2] + 501, "profile/scroll_spouse.png", 106, 30, targetCanvas));
@@ -275,9 +273,7 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 		elements[0].push( new TextLabel(offset[0] + 268, offset[1] + 117, 610, 170, 16, "Liege", "center", "black", true, targetCanvas) );
 
 		mouseOverAreas.push( new MouseOverShape(offset[0] + 231, offset[1] + 48, offset[0] + 231 + 74, offset[1] + 48 + 74, getFullName(liege)) );
-		clickableAreas.push( new ClickableShape(offset[0] + 231, offset[1] + 48, offset[0] + 231 + 74, offset[1] + 48 + 74, "Liege", function () {
-			renderCharacter(liege, offset, renderStack, targetCanvas, helperCanvases);
-		}));
+		clickableAreas.push( new ClickableShape(offset[0] + 231, offset[1] + 48, offset[0] + 231 + 74, offset[1] + 48 + 74, "Liege", makeCharacterRenderFunc(liege, offset, renderStack, targetCanvas, helperCanvases)));
 
 		if (liege.hasPrimaryTitle())
 		{
@@ -311,9 +307,7 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 		if (renderTitle.owner > 0 && characterMap.has(renderTitle.owner))
 		{
 			var titleOwner = characterMap.get(renderTitle.owner);
-			clickableAreas.push( new ClickableShape(offset[0] + 10, offset[1] + 88, offset[0] + 10 + 80, offset[1] + 140 + 84, "Title Owner", function () {
-				renderCharacter(titleOwner, offset, renderStack, targetCanvas, helperCanvases);
-			}));
+			clickableAreas.push( new ClickableShape(offset[0] + 10, offset[1] + 88, offset[0] + 10 + 80, offset[1] + 140 + 84, "Title Owner", makeCharacterRenderFunc(titleOwner, offset, renderStack, targetCanvas, helperCanvases)));
 		}
 	}
 
@@ -327,9 +321,7 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 		helperCanvasIterator++;
 
 		mouseOverAreas.push( new MouseOverShape(offset[0] + 75, offset[1] + 215, offset[0] + 75 + 60, offset[1] + 215 + 60, getFullName(heir)) );
-		clickableAreas.push( new ClickableShape(offset[0] + 75, offset[1] + 215, offset[0] + 75 + 60, offset[1] + 215 + 60, "Heir", function () {
-			renderCharacter(heir, offset, renderStack, targetCanvas, helperCanvases);
-		}));
+		clickableAreas.push( new ClickableShape(offset[0] + 75, offset[1] + 215, offset[0] + 75 + 60, offset[1] + 215 + 60, "Heir", makeCharacterRenderFunc(heir, offset, renderStack, targetCanvas, helperCanvases)));
 
 		elements[0].push( new Shape(offset[0] + 76, offset[1] + 215, offset[2] + 800, "profile/frame_heir.png", 59, 49, targetCanvas));
 		elements[0].push( new Shape(offset[0] + 61, offset[1] + 259, offset[2] + 801, "profile/scroll_heir.png", 88, 30, targetCanvas));
@@ -347,9 +339,7 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 		helperCanvasIterator++;
 
 		mouseOverAreas.push( new MouseOverShape(offset[0] + 158, offset[1] + 215, offset[0] + 158 + 60, offset[1] + 215 + 60, getFullName(regent)) );
-		clickableAreas.push( new ClickableShape(offset[0] + 158, offset[1] + 215, offset[0] + 158 + 60, offset[1] + 215 + 60, "Regent", function () {
-			renderCharacter(regent, offset, renderStack, targetCanvas, helperCanvases);
-		}));
+		clickableAreas.push( new ClickableShape(offset[0] + 158, offset[1] + 215, offset[0] + 158 + 60, offset[1] + 215 + 60, "Regent", makeCharacterRenderFunc(regent, offset, renderStack, targetCanvas, helperCanvases)));
 
 		elements[0].push( new Shape(offset[0] + 145, offset[1] + 259, offset[2] + 803, "profile/scroll_heir.png", 88, 30, targetCanvas));
 
@@ -459,9 +449,7 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 			{
 				var titleOwner = characterMap.get(title.owner);
 
-				clickableAreas.push( new ClickableShape(xPos, yPos - 20, xPos + mouseOverWidth, yPos + 51, "Title Owner", function () {
-					renderCharacter(titleOwner, offset, renderStack, targetCanvas, helperCanvases);
-				}));
+				clickableAreas.push( new ClickableShape(xPos, yPos - 20, xPos + mouseOverWidth, yPos + 51, "Title Owner", makeCharacterRenderFunc(titleOwner, offset, renderStack, targetCanvas, helperCanvases)));
 			}			
 		}
 	}
@@ -546,9 +534,7 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 			elements[0].push( new Shape(xPos, yPos, offset[2] + 652 + pactUsedIterator, titleImages[1], 22, 23, targetCanvas));
 
 			mouseOverAreas.push( new MouseOverShape(xPos, yPos, xPos + mouseOverWidth, yPos + 17 + 24, pact.getDescription()) );
-			clickableAreas.push( new ClickableShape(xPos, yPos, xPos + mouseOverWidth, yPos + 17 + 24, "Pact Partner", function () {
-				renderCharacter(otherCharacter, offset, renderStack, targetCanvas, helperCanvases);
-			}));
+			clickableAreas.push( new ClickableShape(xPos, yPos, xPos + mouseOverWidth, yPos + 17 + 24, "Pact Partner", makeCharacterRenderFunc(otherCharacter, offset, renderStack, targetCanvas, helperCanvases)));
 
 			pactUsedIterator++;
 		}
@@ -567,7 +553,7 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 		var pInner = 0; // Whether the father exists
 
 		// Render First
-		if (fatherId > 0)
+		if (fatherId > 0 && characterMap.has(fatherId))
 		{
 			var xPos = offset[0] + parentPositions[pit][0];
 			var yPos = offset[1] + parentPositions[pit][1];
@@ -578,9 +564,7 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 			helperCanvasIterator++;
 
 			mouseOverAreas.push( new MouseOverShape(xPos, yPos, xPos + 70, yPos + 70, getFullName(father)) );
-			clickableAreas.push( new ClickableShape(xPos, yPos, xPos + 70, yPos + 70, "Father", function () {
-				renderCharacter(father, offset, renderStack, targetCanvas, helperCanvases);
-			}));
+			clickableAreas.push( new ClickableShape(xPos, yPos, xPos + 70, yPos + 70, "Father", makeCharacterRenderFunc(father, offset, renderStack, targetCanvas, helperCanvases)));
 
 			if (!father.alive)
 			{
@@ -591,7 +575,7 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 			var grandfatherId = father.getFather();
 			var grandmotherId = father.getMother();
 
-			if (grandfatherId > 0)
+			if (grandfatherId > 0 && characterMap.has(grandfatherId))
 			{
 				var xPos = offset[0] + grandParentPositions[pOuter][pInner][0];
 				var yPos = offset[1] + grandParentPositions[pOuter][pInner][1];
@@ -607,14 +591,12 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 				}
 
 				mouseOverAreas.push( new MouseOverShape(xPos, yPos, xPos + 70, yPos + 70, getFullName(grandfather)) );
-				clickableAreas.push( new ClickableShape(xPos, yPos, xPos + 70, yPos + 70, "Grandfather", function () {
-					renderCharacter(grandfather, offset, renderStack, targetCanvas, helperCanvases);
-				}));
+				clickableAreas.push( new ClickableShape(xPos, yPos, xPos + 70, yPos + 70, "Grandfather", makeCharacterRenderFunc(grandfather, offset, renderStack, targetCanvas, helperCanvases)))
 
 				pInner = 1;
 			}
 
-			if (grandmotherId > 0)
+			if (grandmotherId > 0 && characterMap.has(grandmotherId))
 			{
 				var xPos = offset[0] + grandParentPositions[pOuter][pInner][0];
 				var yPos = offset[1] + grandParentPositions[pOuter][pInner][1];
@@ -630,9 +612,7 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 				}
 
 				mouseOverAreas.push( new MouseOverShape(xPos, yPos, xPos + 70, yPos + 70, getFullName(grandmother)) );
-				clickableAreas.push( new ClickableShape(xPos, yPos, xPos + 70, yPos + 70, "Grandmother", function () {
-					renderCharacter(grandmother, offset, renderStack, targetCanvas, helperCanvases);
-				}));
+				clickableAreas.push( new ClickableShape(xPos, yPos, xPos + 70, yPos + 70, "Grandmother", makeCharacterRenderFunc(grandmother, offset, renderStack, targetCanvas, helperCanvases)));
 
 				pInner = 1;
 			}
@@ -646,7 +626,7 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 			pit++;
 		}
 
-		if (motherId > 0)
+		if (motherId > 0 && characterMap.has(motherId))
 		{
 			var xPos = offset[0] + parentPositions[pit][0];
 			var yPos = offset[1] + parentPositions[pit][1];
@@ -662,15 +642,13 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 			}
 
 			mouseOverAreas.push( new MouseOverShape(xPos, yPos, xPos + 70, yPos + 70, getFullName(mother)) );
-			clickableAreas.push( new ClickableShape(xPos, yPos, xPos + 70, yPos + 70, "Mother", function () {
-				renderCharacter(mother, offset, renderStack, targetCanvas, helperCanvases);
-			}));
+			clickableAreas.push( new ClickableShape(xPos, yPos, xPos + 70, yPos + 70, "Mother", makeCharacterRenderFunc(mother, offset, renderStack, targetCanvas, helperCanvases)));
 
 			// -------------------------------------- Grandparents Mother Side --------------------------------------
 			var grandfatherId = mother.getFather();
 			var grandmotherId = mother.getMother();
 
-			if (grandfatherId > 0)
+			if (grandfatherId > 0 && characterMap.has(grandfatherId))
 			{
 				var xPos = offset[0] + grandParentPositions[pOuter][pInner][0];
 				var yPos = offset[1] + grandParentPositions[pOuter][pInner][1];
@@ -686,14 +664,12 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 				}
 
 				mouseOverAreas.push( new MouseOverShape(xPos, yPos, xPos + 70, yPos + 70, getFullName(grandfather)) );
-				clickableAreas.push( new ClickableShape(xPos, yPos, xPos + 70, yPos + 70, "Grandfather", function () {
-					renderCharacter(grandfather, offset, renderStack, targetCanvas, helperCanvases);
-				}));
+				clickableAreas.push( new ClickableShape(xPos, yPos, xPos + 70, yPos + 70, "Grandfather", makeCharacterRenderFunc(grandfather, offset, renderStack, targetCanvas, helperCanvases)));
 
 				pInner = 1;
 			}
 
-			if (grandmotherId > 0)
+			if (grandmotherId > 0 && characterMap.has(grandmotherId))
 			{
 				var xPos = offset[0] + grandParentPositions[pOuter][pInner][0];
 				var yPos = offset[1] + grandParentPositions[pOuter][pInner][1];
@@ -709,9 +685,7 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 				}
 
 				mouseOverAreas.push( new MouseOverShape(xPos, yPos, xPos + 70, yPos + 70, getFullName(grandmother)) );
-				clickableAreas.push( new ClickableShape(xPos, yPos, xPos + 70, yPos + 70, "Grandmother", function () {
-					renderCharacter(grandmother, offset, renderStack, targetCanvas, helperCanvases);
-				}));
+				clickableAreas.push( new ClickableShape(xPos, yPos, xPos + 70, yPos + 70, "Grandmother", makeCharacterRenderFunc(grandmother, offset, renderStack, targetCanvas, helperCanvases)));
 
 				pInner = 1;
 			}
@@ -743,9 +717,17 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 			mouseOverWidth = widthOffset;
 		}
 
-		for (var childIterator = 0; childIterator < myCharacter.children.length; childIterator++)
+		var childIterator = 0;
+
+		for (var ci = 0; ci < myCharacter.children.length; ci++)
 		{
-			var childId = myCharacter.children[childIterator];
+			var childId = myCharacter.children[ci];
+
+			if (!characterMap.has(childId))
+			{
+				continue;
+			}
+
 			var child = characterMap.get(childId);
 
 			var xOffset = 30 + (widthOffset * childIterator);
@@ -762,10 +744,20 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 				elements.push( new Shape(xPos + 9, yPos + 40, zPos + 50, "portrait/skull.png", 28, 28, targetCanvas));
 			}
 
-			mouseOverAreas.push( new MouseOverShape(xPos, yPos, xPos + mouseOverWidth, yPos + 70, getFullName(child)) );
-			clickableAreas.push( new ClickableShape(xPos, yPos, xPos + mouseOverWidth, yPos + 70, "Child", function () {
-				renderCharacter(child, offset, renderStack, targetCanvas, helperCanvases);
-			}));
+			var shapeX = xPos + 5;
+			var shapeY = yPos + 5;
+			var maxX = shapeX + mouseOverWidth;
+			var maxY = shapeY + 60;
+
+			if (childIterator == (myCharacter.children.length - 1))
+			{
+				maxX = shapeX + 60;
+			}
+
+			mouseOverAreas.push( new MouseOverShape(shapeX, shapeY, maxX, maxY, getFullName(child)) );
+			clickableAreas.push( new ClickableShape(shapeX, shapeY, maxX, maxY, getFullName(child), makeCharacterRenderFunc(child, offset, renderStack, targetCanvas, helperCanvases)));
+
+			childIterator++;
 		}
 	}
 
@@ -796,9 +788,16 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 			mouseOverWidth = widthOffset;
 		}
 
-		for (var siblingIterator = 0; siblingIterator < siblings.length; siblingIterator++)
+		var siblingIterator = 0;
+
+		for (var si = 0; si < siblings.length; si++)
 		{
-			var siblingId = siblings[siblingIterator];
+			var siblingId = siblings[si];
+			 if (!characterMap.has(siblingId))
+			 {
+			 	continue;
+			 }
+
 			var sibling = characterMap.get(siblingId);
 
 			var xOffset = 334 + (widthOffset * siblingIterator);
@@ -815,10 +814,19 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 				elements.push( new Shape(xPos + 9, yPos + 40, zPos + 50, "portrait/skull.png", 28, 28, targetCanvas));
 			}
 
-			mouseOverAreas.push( new MouseOverShape(xPos, yPos, xPos + mouseOverWidth, yPos + 70, getFullName(sibling)) );
-			clickableAreas.push( new ClickableShape(xPos, yPos, xPos + mouseOverWidth, yPos + 70, "Sibling", function () {
-				renderCharacter(sibling, offset, renderStack, targetCanvas, helperCanvases);
-			}));
+			var shapeX = xPos + 5;
+			var shapeY = yPos + 5;
+			var maxX = shapeX + mouseOverWidth;
+			var maxY = shapeY + 60;
+
+			if (siblingIterator == (siblings.length - 1))
+			{
+				maxX = shapeX + 60;
+			}
+
+			mouseOverAreas.push( new MouseOverShape(shapeX, shapeY, maxX, maxY, getFullName(sibling)) );
+			clickableAreas.push( new ClickableShape(shapeX, shapeY, maxX, maxY, getFullName(sibling), makeCharacterRenderFunc(sibling, offset, renderStack, targetCanvas, helperCanvases)));
+			siblingIterator++;
 		}
 	}
 
@@ -846,9 +854,17 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 			mouseOverWidth = widthOffset;
 		}
 
-		for (var vassalIterator = 0; vassalIterator < myCharacter.vassals.length; vassalIterator++)
+		var vassalIterator = 0;
+
+		for (var vi = 0; vi < myCharacter.vassals.length; vi++)
 		{
-			var vassalId = myCharacter.vassals[vassalIterator];
+			var vassalId = myCharacter.vassals[vi];
+
+			if (!characterMap.has(vassalId))
+			{
+				continue;
+			}
+
 			var vassal = characterMap.get(vassalId);
 
 			var xOffset = 30 + (widthOffset * vassalIterator);
@@ -865,10 +881,20 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 				elements.push( new Shape(xPos + 9, yPos + 40, zPos + 50, "portrait/skull.png", 28, 28, targetCanvas));
 			}
 
-			mouseOverAreas.push( new MouseOverShape(xPos, yPos, xPos + mouseOverWidth, yPos + 70, getFullName(vassal)) );
-			clickableAreas.push( new ClickableShape(xPos, yPos, xPos + mouseOverWidth, yPos + 70, "Vassal", function () {
-				renderCharacter(vassal, offset, renderStack, targetCanvas, helperCanvases);
-			}));
+			var shapeX = xPos + 5;
+			var shapeY = yPos + 5;
+			var maxX = shapeX + mouseOverWidth;
+			var maxY = shapeY + 60;
+
+			if (vassalIterator == (myCharacter.vassals.length - 1))
+			{
+				maxX = shapeX + 60;
+			}
+
+			mouseOverAreas.push( new MouseOverShape(shapeX, shapeY, maxX, maxY, getFullName(vassal)) );
+			clickableAreas.push( new ClickableShape(shapeX, shapeY, maxX, maxY, getFullName(vassal), makeCharacterRenderFunc(vassal, offset, renderStack, targetCanvas, helperCanvases)));
+
+			vassalIterator++;
 		}
 	}
 
@@ -877,9 +903,21 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 		renderStack.addElements(elements[i]);
 	}
 
+	mouseOverAreas.sort(function (a,b) {
+		return b.minX - a.minX;
+	});
+	clickableAreas.sort(function (a,b) {
+		return b.minX - a.minX;
+	});
+
 	loadRenderStack(renderStack);
 
 	//return elements;
+}
+
+function makeCharacterRenderFunc(character, offset, renderStack, targetCanvas, helperCanvases)
+{
+	return function() { renderCharacter(character, offset, renderStack, targetCanvas, helperCanvases); };
 }
 
 /*

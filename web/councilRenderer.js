@@ -58,9 +58,7 @@ function drawCouncil (council, hide, offset, mainRenderStack, targetCanvas, help
 
 		mouseOverAreas.push( new MouseOverShape(549, councilPositions[positionIterator], 549 + 126, councilPositions[positionIterator] + 128, getFullName(chancellor)) );
 
-		clickableAreas.push( new ClickableShape(549, councilPositions[positionIterator], 549 + 126, councilPositions[positionIterator] + 128, "CouncilMember", function () {
-			renderCharacter(chancellor, offset, mainRenderStack, targetCanvas, helperCanvases);
-		}));
+		clickableAreas.push( new ClickableShape(549, councilPositions[positionIterator], 549 + 126, councilPositions[positionIterator] + 128, "CouncilMember", makeCharacterRenderFunc(chancellor, offset, renderStack, targetCanvas, helperCanvases)));
 
 		positionIterator++;
 	}
@@ -85,9 +83,7 @@ function drawCouncil (council, hide, offset, mainRenderStack, targetCanvas, help
 
 		mouseOverAreas.push( new MouseOverShape(549, councilPositions[positionIterator], 549 + 126, councilPositions[positionIterator] + 128, getFullName(marshal)) );
 
-		clickableAreas.push( new ClickableShape(549, councilPositions[positionIterator], 549 + 126, councilPositions[positionIterator] + 128, "CouncilMember", function () {
-			renderCharacter(marshal, offset, mainRenderStack, targetCanvas, helperCanvases);
-		}));
+		clickableAreas.push( new ClickableShape(549, councilPositions[positionIterator], 549 + 126, councilPositions[positionIterator] + 128, "CouncilMember", makeCharacterRenderFunc(marshal, offset, renderStack, targetCanvas, helperCanvases)));
 
 		positionIterator++;
 	}
@@ -112,9 +108,7 @@ function drawCouncil (council, hide, offset, mainRenderStack, targetCanvas, help
 
 		mouseOverAreas.push( new MouseOverShape(549, councilPositions[positionIterator], 549 + 126, councilPositions[positionIterator] + 128, getFullName(steward)) );
 
-		clickableAreas.push( new ClickableShape(549, councilPositions[positionIterator], 549 + 126, councilPositions[positionIterator] + 128, "CouncilMember", function () {
-			renderCharacter(steward, offset, mainRenderStack, targetCanvas, helperCanvases);
-		}));
+		clickableAreas.push( new ClickableShape(549, councilPositions[positionIterator], 549 + 126, councilPositions[positionIterator] + 128, "CouncilMember", makeCharacterRenderFunc(steward, offset, renderStack, targetCanvas, helperCanvases)));
 
 		positionIterator++;
 	}
@@ -139,9 +133,7 @@ function drawCouncil (council, hide, offset, mainRenderStack, targetCanvas, help
 
 		mouseOverAreas.push( new MouseOverShape(549, councilPositions[positionIterator], 549 + 126, councilPositions[positionIterator] + 128, getFullName(spymaster)) );
 
-		clickableAreas.push( new ClickableShape(549, councilPositions[positionIterator], 549 + 126, councilPositions[positionIterator] + 128, "CouncilMember", function () {
-			renderCharacter(spymaster, offset, mainRenderStack, targetCanvas, helperCanvases);
-		}));
+		clickableAreas.push( new ClickableShape(549, councilPositions[positionIterator], 549 + 126, councilPositions[positionIterator] + 128, "CouncilMember", makeCharacterRenderFunc(spymaster, offset, renderStack, targetCanvas, helperCanvases)));
 
 		positionIterator++;
 	}
@@ -166,15 +158,20 @@ function drawCouncil (council, hide, offset, mainRenderStack, targetCanvas, help
 
 		mouseOverAreas.push( new MouseOverShape(549, councilPositions[positionIterator], 549 + 126, councilPositions[positionIterator] + 128, getFullName(chaplain)) );
 
-		clickableAreas.push( new ClickableShape(549, councilPositions[positionIterator], 549 + 126, councilPositions[positionIterator] + 128, "CouncilMember", function () {
-			renderCharacter(chaplain, offset, mainRenderStack, targetCanvas, helperCanvases);
-		}));
+		clickableAreas.push( new ClickableShape(549, councilPositions[positionIterator], 549 + 126, councilPositions[positionIterator] + 128, "CouncilMember", makeCharacterRenderFunc(chaplain, offset, renderStack, targetCanvas, helperCanvases)));
 
 		positionIterator++;
 	}
 
 	minMaxClickableBounds = getMinMaxBounds(clickableAreas);
 	minMaxBounds = getMinMaxBounds(mouseOverAreas);
+
+	mouseOverAreas.sort(function (a,b) {
+		return b.minX - a.minX;
+	});
+	clickableAreas.sort(function (a,b) {
+		return b.minX - a.minX;
+	});
 
 	loadRenderStack(renderStack);
 }

@@ -49,7 +49,7 @@ window.onload = function() {
 		titledCharacters.push(liege);
 
 		myCharacter.liege = liege.id;
-		liege.addVassal(myCharacter);
+		liege.addVassal(myCharacter.id);
 	}
 
 	// Randomize Titles
@@ -298,8 +298,8 @@ window.onload = function() {
 			var cX = c.offsetLeft;
 			var cY = c.offsetTop;
 
-			minMaxClickableBounds = getMinMaxBounds(clickableAreas);
-			minMaxBounds = getMinMaxBounds(mouseOverAreas);
+			minMaxClickableBounds = getMinMaxBounds();
+			minMaxBounds = getMinMaxBounds();
 
 			clicker = function (event) {
 				var cursorX = event.pageX - cX;
@@ -315,12 +315,17 @@ window.onload = function() {
 					return;
 				}
 
+				/*$("#CX").html(cursorX);
+				$("#CY").html(cursorY);
+				return;*/
+
 				for (var i = 0; i < clickableAreas.length; i++) {
 					if (clickableAreas[i].isInShape(cursorX,cursorY))
 					{
 						//alert(clickableAreas[i].description);
 						if (clickableAreas[i].action)
 						{
+							//$("#candidates").html(clickableAreas[i].description);
 							clickableAreas[i].action();
 						}
 
@@ -344,6 +349,10 @@ window.onload = function() {
 				{
 					return;
 				}
+
+				/*$("#MX").html(cursorX);
+				$("#MY").html(cursorY);
+				return;*/
 
 				for (var i = 0; i < mouseOverAreas.length; i++) {
 					if (mouseOverAreas[i].isInShape(cursorX,cursorY))

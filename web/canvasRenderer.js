@@ -23,20 +23,58 @@ MouseOverShape.prototype.isInShape = function (x, y) {
 	return this.minX <= x && x <= this.maxX && this.minY <= y && y <= this.maxY;
 }
 
-function getMinMaxBounds(mouseOverShapeArray) {
-	if (!mouseOverShapeArray || mouseOverShapeArray.length == 0)
+function getMinMaxClickableBounds() {
+	if (!clickableAreas || clickableAreas.length == 0)
+	{
+		return new ClickableShape(0,0,1,1,"", null);
+	}
+
+	var minX = clickableAreas[0].minX;
+	var minY = clickableAreas[0].minY;
+	var maxX = clickableAreas[0].maxX;
+	var maxY = clickableAreas[0].maxY;
+
+	for (var i = 1; i < clickableAreas.length; i++)
+	{
+		var shape = clickableAreas[i];
+		if (shape.minX < minX)
+		{
+			minX = shape.minX;
+		}
+
+		if (shape.minY < minY)
+		{
+			minY = shape.minY;
+		}
+
+		if (shape.maxX > maxX)
+		{
+			maxX = shape.maxX;
+		}
+
+		if (shape.maxY > maxY)
+		{
+			maxY = shape.maxY;
+		}
+	}
+
+	return new ClickableShape(minX,minY,maxX,maxY,"", null);
+}
+
+function getMinMaxBounds() {
+	if (!mouseOverAreas || mouseOverAreas.length == 0)
 	{
 		return new MouseOverShape(0,0,1,1,"");
 	}
 
-	var minX = mouseOverShapeArray[0].minX;
-	var minY = mouseOverShapeArray[0].minY;
-	var maxX = mouseOverShapeArray[0].maxX;
-	var maxY = mouseOverShapeArray[0].maxY;
+	var minX = mouseOverAreas[0].minX;
+	var minY = mouseOverAreas[0].minY;
+	var maxX = mouseOverAreas[0].maxX;
+	var maxY = mouseOverAreas[0].maxY;
 
-	for (var i = 1; i < mouseOverShapeArray.length; i++)
+	for (var i = 1; i < mouseOverAreas.length; i++)
 	{
-		var mouseOverShape = mouseOverShapeArray[i];
+		var mouseOverShape = mouseOverAreas[i];
 		if (mouseOverShape.minX < minX)
 		{
 			minX = mouseOverShape.minX;
