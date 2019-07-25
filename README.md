@@ -4,6 +4,9 @@ Interactive Map Renderer based on Crusader Kings 2 by Paradox Interactive
 Preview of character screen (randomized sample data):
 ![preview](https://github.com/Elvaron/CK2InteractiveMaps/blob/master/preview.png)
 
+Preview of leaflet.js map screen (static vector shapes):
+![mapPreview](https://github.com/Elvaron/CK2InteractiveMaps/blob/master/mapPreview.png)
+
 # Copyright
 Image Copyright Paradox Interactive. All rights reserved. Personal use only.
 
