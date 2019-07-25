@@ -21,10 +21,31 @@ crossorigin=""></script>
 <body>
 
 <center>
-	<table><tr>
-		<td><div id="map_tadinthadar"></div></td>
-		<!--<td><canvas id="province" width="550" height="695">Your browser does not support the HTML5 canvas tag.</canvas></td>-->
-	</tr></table>
+	<table>
+		<tr>
+			<td>
+				<div id="map_tadinthadar"></div>
+			</td>
+			<!--<td><canvas id="province" width="550" height="695">Your browser does not support the HTML5 canvas tag.</canvas></td>-->
+		</tr>
+		<tr>
+			<td>
+				<div>
+					<table width=100%>
+						<tr>
+							<td align="center"><input id="slide" type="range" min="0" max="1" step="0.1" value="0.5" onchange="updateOpacity('province', this.value)"></td>
+							<td align="center"><input id="slide" type="range" min="0" max="1" step="0.1" value="0.5" onchange="updateOpacity('region', this.value)"></td>
+							<td align="center"><input id="slide" type="range" min="0" max="1" step="0.1" value="0.5" onchange="updateOpacity('realm', this.value)"></td>
+						</tr>
+						<tr>
+							<td align="center">Province Opacity</td>
+							<td align="center">Region Opacity</td>
+							<td align="center">Realm Opacity</td>
+						</tr>
+				</div>
+			</td>
+		</tr>
+	</table>
 </center>
 
 <script src="map.js"></script>
@@ -34,6 +55,8 @@ crossorigin=""></script>
 <script src="character.js"></script>
 <script src="traits.js"></script>
 <script src="metadata.js"></script>
+<script src="mapMetadata.js"></script>
+<script src="mapdata.js"></script>
 
 </body>
 </html>

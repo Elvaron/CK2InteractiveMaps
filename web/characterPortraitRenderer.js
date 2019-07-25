@@ -276,10 +276,17 @@ function newRandomTitle(importance, myCharacter, makePrimary) {
 			)
 		);
 
-		myCharacter.addTitle(myTitle.id, makePrimary);
+		if (myCharacter != null)
+		{
+			myCharacter.addTitle(myTitle.id, makePrimary);
+		}
+		
 		titles.set(myTitle.id, myTitle);
 	} else {
-		myCharacter.primaryTitle = 0;
+		if (myCharacter != null)
+		{
+			myCharacter.primaryTitle = 0;
+		}
 	}
 }
 

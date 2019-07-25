@@ -1,9 +1,4 @@
-var characterIterator = 1;
-var characterMap = null;
-
-var currentTitle = 0;
-
-function loadJson(json) {
+/*function loadJson(json) {
 	var data = JSON.parse(json);
 
 	var dataContainer = new DataLoader();
@@ -63,7 +58,7 @@ function loadJson(json) {
 
 		updateSelectionList();
 	}
-}
+}*/
 
 function saveJson() {
 	var saveData = new DataSaver(houses, titles, characterMap);
@@ -530,29 +525,8 @@ function populateTitleTypes(id)
 	$(id).append(new Option("Empire", titleTypes.EMPIRE));
 }
 
-window.onload = function() {	
-
-	document.getElementById('contentFile').onchange = function(evt) {
-        try {
-            let files = evt.target.files;
-            if (!files.length) {
-                alert('No file selected!');
-                return;
-            }
-            let file = files[0];
-            let reader = new FileReader();
-            const self = this;
-            reader.onload = (event) => {
-                loadJson(event.target.result)
-            };
-            reader.readAsText(file);
-        } catch (err) {
-            console.error(err);
-        }
-    }
-
-    characterMap = new Map();
-
+function initTitlesForm()
+{
 	populateTitleTypes("#TitleType");
 
 	populateHoldingTypes("#HoldingType1");
@@ -687,5 +661,27 @@ window.onload = function() {
 		}
 
 		saveTitle();
-	});	
+	});
+}
+
+window.onload = function() {
+
+	document.getElementById('contentFile').onchange = function(evt) {
+        try {
+            let files = evt.target.files;
+            if (!files.length) {
+                alert('No file selected!');
+                return;
+            }
+            let file = files[0];
+            let reader = new FileReader();
+            const self = this;
+            reader.onload = (event) => {
+                loadJson(event.target.result)
+            };
+            reader.readAsText(file);
+        } catch (err) {
+            console.error(err);
+        }
+    }	
 }

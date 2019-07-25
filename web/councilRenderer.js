@@ -1,6 +1,6 @@
 var councilVisible = false;
 
-function drawCouncil (council, hide, offset, mainRenderStack, targetCanvas, helperCanvases)
+function drawCouncil (council, hide, isDM, offset, mainRenderStack, targetCanvas, helperCanvases)
 {
 	if (councilVisible || hide)
 	{
@@ -43,11 +43,13 @@ function drawCouncil (council, hide, offset, mainRenderStack, targetCanvas, help
 		var chancellor = characterMap.get(council.chancellor);
 		renderStack.addElement(new Shape(549, councilPositions[positionIterator], 0, "council/frame.png", 126, 128, targetCanvas));
 		renderStack.addElement(new Shape(549, councilPositions[positionIterator] + 2, 1000, "council/banner.png", 126, 128, targetCanvas));
-		renderStack.addElement(new Shape(549, councilPositions[positionIterator], 500, "council/bg_number.png", 126, 128, targetCanvas));
-
-		var attributes = chancellor.getCK2Stats();
-
-		renderStack.addElement( new TextLabel(660, councilPositions[positionIterator] + 22, 1500, 100, 18, attributes[0], "right", "white", true, targetCanvas, true));
+		
+		if (isDM)
+		{
+			renderStack.addElement(new Shape(549, councilPositions[positionIterator], 500, "council/bg_number.png", 126, 128, targetCanvas));
+			var attributes = chancellor.getCK2Stats();
+			renderStack.addElement( new TextLabel(660, councilPositions[positionIterator] + 22, 1500, 100, 18, attributes[0], "right", "white", true, targetCanvas, true));
+		}
 
 		clearCanvas("council1");
 
@@ -68,11 +70,13 @@ function drawCouncil (council, hide, offset, mainRenderStack, targetCanvas, help
 		var marshal = characterMap.get(council.marshal);
 		renderStack.addElement(new Shape(549, councilPositions[positionIterator], 0, "council/frame.png", 126, 128, targetCanvas));
 		renderStack.addElement(new Shape(549, councilPositions[positionIterator] + 2, 1000, "council/banner.png", 126, 128, targetCanvas));
-		renderStack.addElement(new Shape(549, councilPositions[positionIterator], 500, "council/bg_number.png", 126, 128, targetCanvas));
-
-		var attributes = marshal.getCK2Stats();
-
-		renderStack.addElement( new TextLabel(660, councilPositions[positionIterator] + 22, 1500, 100, 18, attributes[1], "right", "white", true, targetCanvas, true));
+		
+		if (isDM)
+		{
+			renderStack.addElement(new Shape(549, councilPositions[positionIterator], 500, "council/bg_number.png", 126, 128, targetCanvas));
+			var attributes = marshal.getCK2Stats();
+			renderStack.addElement( new TextLabel(660, councilPositions[positionIterator] + 22, 1500, 100, 18, attributes[1], "right", "white", true, targetCanvas, true));
+		}
 
 		clearCanvas("council2");
 
@@ -93,11 +97,13 @@ function drawCouncil (council, hide, offset, mainRenderStack, targetCanvas, help
 		var steward = characterMap.get(council.steward);
 		renderStack.addElement(new Shape(549, councilPositions[positionIterator], 0, "council/frame.png", 126, 128, targetCanvas));
 		renderStack.addElement(new Shape(549, councilPositions[positionIterator] + 2, 1000, "council/banner.png", 126, 128, targetCanvas));
-		renderStack.addElement(new Shape(549, councilPositions[positionIterator], 500, "council/bg_number.png", 126, 128, targetCanvas));
-
-		var attributes = steward.getCK2Stats();
-
-		renderStack.addElement( new TextLabel(660, councilPositions[positionIterator] + 22, 1500, 100, 18, attributes[2], "right", "white", true, targetCanvas, true));
+		
+		if (isDM)
+		{
+			renderStack.addElement(new Shape(549, councilPositions[positionIterator], 500, "council/bg_number.png", 126, 128, targetCanvas));
+			var attributes = steward.getCK2Stats();
+			renderStack.addElement( new TextLabel(660, councilPositions[positionIterator] + 22, 1500, 100, 18, attributes[2], "right", "white", true, targetCanvas, true));
+		}
 
 		clearCanvas("council3");
 
@@ -118,11 +124,13 @@ function drawCouncil (council, hide, offset, mainRenderStack, targetCanvas, help
 		var spymaster = characterMap.get(council.spymaster);
 		renderStack.addElement(new Shape(549, councilPositions[positionIterator], 0, "council/frame.png", 126, 128, targetCanvas));
 		renderStack.addElement(new Shape(549, councilPositions[positionIterator] + 2, 1000, "council/banner.png", 126, 128, targetCanvas));
-		renderStack.addElement(new Shape(549, councilPositions[positionIterator], 500, "council/bg_number.png", 126, 128, targetCanvas));
 
-		var attributes = spymaster.getCK2Stats();
-
-		renderStack.addElement( new TextLabel(660, councilPositions[positionIterator] + 22, 1500, 100, 18, attributes[3], "right", "white", true, targetCanvas, true));
+		if (isDM)
+		{
+			renderStack.addElement(new Shape(549, councilPositions[positionIterator], 500, "council/bg_number.png", 126, 128, targetCanvas));
+			var attributes = spymaster.getCK2Stats();
+			renderStack.addElement( new TextLabel(660, councilPositions[positionIterator] + 22, 1500, 100, 18, attributes[3], "right", "white", true, targetCanvas, true));
+		}
 
 		clearCanvas("council4");
 
@@ -143,11 +151,13 @@ function drawCouncil (council, hide, offset, mainRenderStack, targetCanvas, help
 		var chaplain = characterMap.get(council.chaplain);
 		renderStack.addElement(new Shape(549, councilPositions[positionIterator], 0, "council/frame.png", 126, 128, targetCanvas));
 		renderStack.addElement(new Shape(549, councilPositions[positionIterator] + 2, 1000, "council/banner.png", 126, 128, targetCanvas));
-		renderStack.addElement(new Shape(549, councilPositions[positionIterator], 500, "council/bg_number.png", 126, 128, targetCanvas));
-
-		var attributes = chaplain.getCK2Stats();
-
-		renderStack.addElement( new TextLabel(660, councilPositions[positionIterator] + 22, 1500, 100, 18, attributes[4], "right", "white", true, targetCanvas, true));
+		
+		if (isDM)
+		{
+			renderStack.addElement(new Shape(549, councilPositions[positionIterator], 500, "council/bg_number.png", 126, 128, targetCanvas));
+			var attributes = chaplain.getCK2Stats();
+			renderStack.addElement( new TextLabel(660, councilPositions[positionIterator] + 22, 1500, 100, 18, attributes[4], "right", "white", true, targetCanvas, true));
+		}
 
 		clearCanvas("council5");
 

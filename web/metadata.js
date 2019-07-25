@@ -13,6 +13,8 @@ function DataLoader() {
 function LandedTitle(name, id) {
 	this.name = name;
 	this.id = id;
+
+	this.mapData = null;
 }
 
 function County(name, id) {
@@ -252,11 +254,17 @@ function getTitleImages(landedTitle) {
 		if (landedTitle.primaryHolding && titles.has(landedTitle.primaryHolding))
 		{
 			var primaryHolding = titles.get(landedTitle.primaryHolding);
-			result.push("provinces/" + primaryHolding.name.toLowerCase().replace(" ", "_") + ".png");
+
+			var name = primaryHolding.name != "" ? primaryHolding.name.toLowerCase().replace(" ", "_") : primaryHolding.id;
+
+			result.push("provinces/" + name + ".png");
 			return result;
 		}
 	}
-	result.push("provinces/" + landedTitle.name.toLowerCase().replace(" ", "_") + ".png");
+
+	var name = landedTitle.name != "" ? landedTitle.name.toLowerCase().replace(" ", "_") : landedTitle.id;
+
+	result.push("provinces/" + name + ".png");
 	return result;
 }
 
@@ -448,10 +456,6 @@ var pacts = new Map();
 */
 var houseIterator = 1;
 var houses = new Map();
-/*
-var testHouse = new House("Test", houseIterator++);
-houses.set(testHouse.id, testHouse);
-*/
 
 /*
 	LANDS
@@ -459,33 +463,14 @@ houses.set(testHouse.id, testHouse);
 */
 var titleIterator = 1;
 var titles = new Map();
-/*
-var testProvince = new County("TestProvince", titleIterator++);
-titles.set(testProvince.id, testProvince);
 
-var testHoldingOne = new Holding("MyCastle", titleIterator++, holdingtypes.CASTLE);
-testHoldingOne.parent = testProvince.id;
-testHoldingOne.owner = 1;
-testProvince.holdings.push(testHoldingOne);
-titles.set(testHoldingOne.id, testHoldingOne);
-
-var testHoldingTwo = new Holding("MyCity", titleIterator++, holdingtypes.CITY);
-testHoldingTwo.parent = testProvince.id;
-testProvince.holdings.push(testHoldingTwo);
-titles.set(testHoldingTwo.id, testHoldingTwo);
-
-var testHoldingThree = new Holding("MyTemple", titleIterator++, holdingtypes.TEMPLE);
-testHoldingThree.parent = testProvince.id;
-testProvince.holdings.push(testHoldingThree);
-titles.set(testHoldingThree.id, testHoldingThree);*/
+var currentTitle = 0;
 
 /*
 	CHARACTERS
 */
-/*
-var testCharacter = new Character("Fritz", characterIterator++);
-testCharacter.house = testHouse.id;
-testCharacter.council = new Council(testCharacter.id);
 
-characters.set(testCharacter.id, testCharacter);
-*/
+var characterIterator = 1;
+var characterMap = new Map();
+
+var currentCharacter = 0;

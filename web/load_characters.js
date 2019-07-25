@@ -1,11 +1,7 @@
-var characterIterator = 1;
-var characterMap = null;
-
-var currentCharacter = 0;
 var $flowchart = null;
 var $blankFlowChartData = null;
 
-function loadJson(json) {
+/*function loadJson(json) {
 	var data = JSON.parse(json);
 
 	var dataContainer = new DataLoader();
@@ -66,7 +62,7 @@ function loadJson(json) {
 		populateHouses("#select_character_house");
 		updateSelectionList();
 	}
-}
+}*/
 
 function saveJson() {
 	var saveData = new DataSaver(houses, titles, characterMap);
@@ -496,27 +492,7 @@ $(document).ready(function() {
 	});
 });
 
-window.onload = function() {	
-
-	document.getElementById('contentFile').onchange = function(evt) {
-        try {
-            let files = evt.target.files;
-            if (!files.length) {
-                alert('No file selected!');
-                return;
-            }
-            let file = files[0];
-            let reader = new FileReader();
-            const self = this;
-            reader.onload = (event) => {
-                loadJson(event.target.result)
-            };
-            reader.readAsText(file);
-        } catch (err) {
-            console.error(err);
-        }
-    }
-
+function initCharacterForm() {
 	// Genders
 	$("#CharacterGender").append(new Option("Male", gender.MALE));
 	$("#CharacterGender").append(new Option("Female", gender.FEMALE));
@@ -735,4 +711,26 @@ window.onload = function() {
 
 		saveJson();
 	});
+}
+
+window.onload = function() {	
+
+	document.getElementById('contentFile').onchange = function(evt) {
+        try {
+            let files = evt.target.files;
+            if (!files.length) {
+                alert('No file selected!');
+                return;
+            }
+            let file = files[0];
+            let reader = new FileReader();
+            const self = this;
+            reader.onload = (event) => {
+                loadJson(event.target.result)
+            };
+            reader.readAsText(file);
+        } catch (err) {
+            console.error(err);
+        }
+    }
 }

@@ -33,9 +33,11 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 
 	var elements = [[]];
 
+	var isDM = false;
+
 	var helperCanvasIterator = 0;
 
-	drawCouncil(null, true, offset, renderStack, targetCanvas, helperCanvases);
+	drawCouncil(null, true, false, offset, renderStack, targetCanvas, helperCanvases);
 
 	var traits = GetTraits();
 
@@ -49,36 +51,45 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 	// -------------------------------------- BACKGROUND --------------------------------------
 
 	elements[0].push( new Shape(offset[0], offset[1], offset[2] + 1, "profile/bg.png", 549, 693, targetCanvas));
+	if (!isDM)
+	{
+		elements[0].push( new Shape(offset[0], offset[1], offset[2] + 2, "profile/censor.png", 549, 693, targetCanvas));
+	}
 
 	// -------------------------------------- TITLE, AGE, ARMOR CLASS --------------------------------------
 	var characterName = getFullName(myCharacter);
 	elements[0].push( new TextLabel(offset[0] + 20, offset[1] + 30, offset[2] + 3, 300, 16, characterName, "left", "black", true, targetCanvas));
 	elements[0].push( new TextLabel(offset[0] + 444, offset[1] + 72, offset[2] + 4, 300, 20, myCharacter.age, "left", "black", true, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 507, offset[1] + 72, offset[2] + 5, 300, 20, myCharacter.dndattributes.armorClass, "left", "black", true, targetCanvas));	
+	if (isDM) {
+		elements[0].push( new TextLabel(offset[0] + 507, offset[1] + 72, offset[2] + 5, 300, 20, myCharacter.dndattributes.armorClass, "left", "black", true, targetCanvas));
+	}
 
 	// -------------------------------------- DND Attributes & Modifiers --------------------------------------
-	var dndStats = myCharacter.getDndStats();
+	if (isDM)
+	{
+		var dndStats = myCharacter.getDndStats();
 
-	elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 99, offset[2] + 6, 100, 18, dndStats[0], "right", "black", true, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 121, offset[2] + 6, 100, 18, dndStats[1], "right", "black", true, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 143, offset[2] + 6, 100, 18, dndStats[2], "right", "black", true, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 167, offset[2] + 6, 100, 18, dndStats[3], "right", "black", true, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 190, offset[2] + 6, 100, 18, dndStats[4], "right", "black", true, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 214, offset[2] + 6, 100, 18, dndStats[5], "right", "black", true, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 99, offset[2] + 6, 100, 18, dndStats[0], "right", "black", true, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 121, offset[2] + 6, 100, 18, dndStats[1], "right", "black", true, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 143, offset[2] + 6, 100, 18, dndStats[2], "right", "black", true, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 167, offset[2] + 6, 100, 18, dndStats[3], "right", "black", true, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 190, offset[2] + 6, 100, 18, dndStats[4], "right", "black", true, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 214, offset[2] + 6, 100, 18, dndStats[5], "right", "black", true, targetCanvas));
 
-	elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 97, offset[2] + 7, 100, 17, "(     )", "right", "black", false, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 119, offset[2] + 7, 100, 17, "(     )", "right", "black", false, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 141, offset[2] + 7, 100, 17, "(     )", "right", "black", false, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 165, offset[2] + 7, 100, 17, "(     )", "right", "black", false, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 188, offset[2] + 7, 100, 17, "(     )", "right", "black", false, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 212, offset[2] + 7, 100, 17, "(     )", "right", "black", false, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 97, offset[2] + 7, 100, 17, "(     )", "right", "black", false, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 119, offset[2] + 7, 100, 17, "(     )", "right", "black", false, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 141, offset[2] + 7, 100, 17, "(     )", "right", "black", false, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 165, offset[2] + 7, 100, 17, "(     )", "right", "black", false, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 188, offset[2] + 7, 100, 17, "(     )", "right", "black", false, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 212, offset[2] + 7, 100, 17, "(     )", "right", "black", false, targetCanvas));
 
-	elements[0].push( new TextLabel(offset[0] + 518, offset[1] + 99, offset[2] + 8, 100, 18, dndStats[6], "right", "black", true, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 518, offset[1] + 121, offset[2] + 8, 100, 18, dndStats[7], "right", "black", true, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 518, offset[1] + 143, offset[2] + 8, 100, 18, dndStats[8], "right", "black", true, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 518, offset[1] + 167, offset[2] + 8, 100, 18, dndStats[9], "right", "black", true, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 518, offset[1] + 190, offset[2] + 8, 100, 18, dndStats[10], "right", "black", true, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 518, offset[1] + 214, offset[2] + 8, 100, 18, dndStats[11], "right", "black", true, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 518, offset[1] + 99, offset[2] + 8, 100, 18, dndStats[6], "right", "black", true, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 518, offset[1] + 121, offset[2] + 8, 100, 18, dndStats[7], "right", "black", true, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 518, offset[1] + 143, offset[2] + 8, 100, 18, dndStats[8], "right", "black", true, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 518, offset[1] + 167, offset[2] + 8, 100, 18, dndStats[9], "right", "black", true, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 518, offset[1] + 190, offset[2] + 8, 100, 18, dndStats[10], "right", "black", true, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 518, offset[1] + 214, offset[2] + 8, 100, 18, dndStats[11], "right", "black", true, targetCanvas));
+	}
 
 	// -------------------------------------- SPOUSE --------------------------------------
 	if (myCharacter.spouse > 0 && characterMap.has(myCharacter.spouse))
@@ -140,55 +151,61 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 	elements[0].push( new Shape(offset[0] + 349, offset[1] + 182, offset[2] + 10, raceImage, 33, 33, targetCanvas));
 	mouseOverAreas.push( new MouseOverShape(offset[0] + 349, offset[1] + 182, offset[0] + 382, offset[1] + 215, myCharacter.dndattributes.race) );
 
-	var alignmentImage = myCharacter.getAlignmentImage();
-	elements[0].push( new Shape(offset[0] + 394, offset[1] + 182, offset[2] + 11, alignmentImage, 33, 33, targetCanvas));
-	mouseOverAreas.push( new MouseOverShape(offset[0] + 394, offset[1] + 182, offset[0] + 427, offset[1] + 215, myCharacter.getAlignmentText()) );
+	if (isDM) {
+		var alignmentImage = myCharacter.getAlignmentImage();
+		elements[0].push( new Shape(offset[0] + 394, offset[1] + 182, offset[2] + 11, alignmentImage, 33, 33, targetCanvas));
+		mouseOverAreas.push( new MouseOverShape(offset[0] + 394, offset[1] + 182, offset[0] + 427, offset[1] + 215, myCharacter.getAlignmentText()) );
+	}
 
 	// -------------------------------------- CK2 Attributes & Modifiers --------------------------------------
-	var ck2Stats = myCharacter.getCK2Stats();
+	if (isDM) {
+		var ck2Stats = myCharacter.getCK2Stats();
 
-	elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 238, offset[2] + 12, 100, 17, ck2Stats[0], "right", "white", false, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 259, offset[2] + 12, 100, 17, ck2Stats[1], "right", "white", false, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 280, offset[2] + 12, 100, 17, ck2Stats[2], "right", "white", false, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 301, offset[2] + 12, 100, 17, ck2Stats[3], "right", "white", false, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 322, offset[2] + 12, 100, 17, ck2Stats[4], "right", "white", false, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 343, offset[2] + 12, 100, 17, ck2Stats[5], "right", "white", false, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 238, offset[2] + 12, 100, 17, ck2Stats[0], "right", "white", false, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 259, offset[2] + 12, 100, 17, ck2Stats[1], "right", "white", false, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 280, offset[2] + 12, 100, 17, ck2Stats[2], "right", "white", false, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 301, offset[2] + 12, 100, 17, ck2Stats[3], "right", "white", false, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 322, offset[2] + 12, 100, 17, ck2Stats[4], "right", "white", false, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 488, offset[1] + 343, offset[2] + 12, 100, 17, ck2Stats[5], "right", "white", false, targetCanvas));
 
-	var stateAttributes = myCharacter.getStateAttributes();
+		var stateAttributes = myCharacter.getStateAttributes();
 
-	elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 236, offset[2] + 13, 100, 17, "(     )", "right", "white", false, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 257, offset[2] + 13, 100, 17, "(     )", "right", "white", false, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 278, offset[2] + 13, 100, 17, "(     )", "right", "white", false, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 299, offset[2] + 13, 100, 17, "(     )", "right", "white", false, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 320, offset[2] + 13, 100, 17, "(     )", "right", "white", false, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 236, offset[2] + 13, 100, 17, "(     )", "right", "white", false, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 257, offset[2] + 13, 100, 17, "(     )", "right", "white", false, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 278, offset[2] + 13, 100, 17, "(     )", "right", "white", false, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 299, offset[2] + 13, 100, 17, "(     )", "right", "white", false, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 525, offset[1] + 320, offset[2] + 13, 100, 17, "(     )", "right", "white", false, targetCanvas));
 
-	elements[0].push( new TextLabel(offset[0] + 520, offset[1] + 238, offset[2] + 14, 100, 17, stateAttributes[0], "right", "white", false, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 520, offset[1] + 259, offset[2] + 14, 100, 17, stateAttributes[1], "right", "white", false, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 520, offset[1] + 280, offset[2] + 14, 100, 17, stateAttributes[2], "right", "white", false, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 520, offset[1] + 301, offset[2] + 14, 100, 17, stateAttributes[3], "right", "white", false, targetCanvas));
-	elements[0].push( new TextLabel(offset[0] + 520, offset[1] + 322, offset[2] + 14, 100, 17, stateAttributes[4], "right", "white", false, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 520, offset[1] + 238, offset[2] + 14, 100, 17, stateAttributes[0], "right", "white", false, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 520, offset[1] + 259, offset[2] + 14, 100, 17, stateAttributes[1], "right", "white", false, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 520, offset[1] + 280, offset[2] + 14, 100, 17, stateAttributes[2], "right", "white", false, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 520, offset[1] + 301, offset[2] + 14, 100, 17, stateAttributes[3], "right", "white", false, targetCanvas));
+		elements[0].push( new TextLabel(offset[0] + 520, offset[1] + 322, offset[2] + 14, 100, 17, stateAttributes[4], "right", "white", false, targetCanvas));
 
-	if (myCharacter.dndattributes.npcClass > 0 && npcClasses.has(myCharacter.dndattributes.npcClass))
-	{
-		var npcClass = npcClasses.get(myCharacter.dndattributes.npcClass);
-		elements[0].push( new TextLabel(offset[0] + 387, offset[1] + 245, offset[2] + 13, 90, 18, npcClass.name, "center", "black", true, targetCanvas));
+		if (myCharacter.dndattributes.npcClass > 0 && npcClasses.has(myCharacter.dndattributes.npcClass))
+		{
+			var npcClass = npcClasses.get(myCharacter.dndattributes.npcClass);
+			elements[0].push( new TextLabel(offset[0] + 387, offset[1] + 245, offset[2] + 13, 90, 18, npcClass.name, "center", "black", true, targetCanvas));
+		}
 	}
 
 	// -------------------------------------- S&F -----------------------------------------
-	if (myCharacter.strongholdType != strongholdType.NONE)
-	{
-		var icon = getStrongholdTypeIcon(myCharacter.strongholdType);
+	if (isDM) {
+		if (myCharacter.strongholdType != strongholdType.NONE)
+		{
+			var icon = getStrongholdTypeIcon(myCharacter.strongholdType);
 
-		elements[0].push( new Shape( offset[0] + 381, offset[1] + 322, offset[2] + 14, icon, 24, 24, targetCanvas) );
-		mouseOverAreas.push( new MouseOverShape(offset[0] + 381, offset[1] + 322, offset[0] + 405, offset[1] + 346, myCharacter.strongholdType) );
-	}
+			elements[0].push( new Shape( offset[0] + 381, offset[1] + 322, offset[2] + 14, icon, 24, 24, targetCanvas) );
+			mouseOverAreas.push( new MouseOverShape(offset[0] + 381, offset[1] + 322, offset[0] + 405, offset[1] + 346, myCharacter.strongholdType) );
+		}
 
-	if (myCharacter.strongholdClass != classType.NONE)
-	{
-		var icon = getStrongholdClassIcon(myCharacter.strongholdClass);
+		if (myCharacter.strongholdClass != classType.NONE)
+		{
+			var icon = getStrongholdClassIcon(myCharacter.strongholdClass);
 
-		elements[0].push( new Shape( offset[0] + 410, offset[1] + 322, offset[2] + 14, icon, 24, 24, targetCanvas) );
-		mouseOverAreas.push( new MouseOverShape(offset[0] + 410, offset[1] + 322, offset[0] + 434, offset[1] + 346, myCharacter.strongholdClass) );
+			elements[0].push( new Shape( offset[0] + 410, offset[1] + 322, offset[2] + 14, icon, 24, 24, targetCanvas) );
+			mouseOverAreas.push( new MouseOverShape(offset[0] + 410, offset[1] + 322, offset[0] + 434, offset[1] + 346, myCharacter.strongholdClass) );
+		}
 	}
 
 	// -------------------------------------- Traits --------------------------------------
@@ -462,7 +479,7 @@ function renderCharacter(myCharacter, offset, renderStack, targetCanvas, helperC
 		mouseOverAreas.push( new MouseOverShape(offset[0] + 344, offset[1] + 262, offset[0] + 344 + 87, offset[1] + 262 + 24, "View council") );
 		//drawCouncil (council, hide, offset, mainRenderStack, targetCanvas, helperCanvases)
 		clickableAreas.push( new ClickableShape(offset[0] + 344, offset[1] + 262, offset[0] + 344 + 87, offset[1] + 262 + 24, "Council Button", function () {
-			drawCouncil(myCharacter.council, false, offset, renderStack, targetCanvas, helperCanvases);
+			drawCouncil(myCharacter.council, false, isDM, offset, renderStack, targetCanvas, helperCanvases);
 		}));
 	}
 

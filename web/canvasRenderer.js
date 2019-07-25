@@ -121,6 +121,11 @@ var Shape = function (x, y, z, url, width, height, targetId) {
 Shape.prototype.draw = function () {
 	if (this.targetContext)
 	{
+		if (this.image == null)
+		{
+			return;
+		}
+
 		if (this.partial)
 		{
 			this.targetContext.drawImage(this.image, this.partialX, this.partialY, this.partialWidth, this.partialHeight, this.x, this.y, this.width, this.height);
@@ -328,6 +333,8 @@ function loadRenderStack (renderStack) {
 	// Load Images
 	for (var i = 0; i < imageCount; i++)
 	{
+		imagesToLoad[i].crossOrigin = "Anonymous";
+		imagesToLoad[i].setAttribute('crossOrigin', 'anonymous');
 		imagesToLoad[i].onload = function() {
 			imagesLoaded++;
 			if (imagesLoaded == imageCount) {

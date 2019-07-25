@@ -137,16 +137,6 @@ window.onload = function() {
 		child.house = myCharacter.house;
 		spouse.children.push(child.id);
 		myCharacter.children.push(child.id);
-
-		// Create Canvas to render child
-		var myTmpCanvas = document.createElement('canvas');
-		myTmpCanvas.id = "helper_" + nextHelper; // Id
-		nextHelper++; // Increase counter
-		myTmpCanvas.width = 200;
-		myTmpCanvas.height = 200;
-		myTmpCanvas.style.display = "none";
-		document.body.appendChild(myTmpCanvas);
-		helpers.push(myTmpCanvas.id);
 	}
 
 	// Randomize Siblings
@@ -165,16 +155,6 @@ window.onload = function() {
 		{
 			titledCharacters.push(sibling);
 		}
-
-		// Create Canvas to render sibling
-		var myTmpCanvas = document.createElement('canvas');
-		myTmpCanvas.id = "helper_" + nextHelper; // Id
-		nextHelper++; // Increase counter
-		myTmpCanvas.width = 200;
-		myTmpCanvas.height = 200;
-		myTmpCanvas.style.display = "none";
-		document.body.appendChild(myTmpCanvas);
-		helpers.push(myTmpCanvas.id);
 	}
 
 	// Randomize Vassals
@@ -190,16 +170,6 @@ window.onload = function() {
 		{
 			titledCharacters.push(vassal);
 		}
-
-		// Create Canvas to render vassal
-		var myTmpCanvas = document.createElement('canvas');
-		myTmpCanvas.id = "helper_" + nextHelper; // Id
-		nextHelper++; // Increase counter
-		myTmpCanvas.width = 200;
-		myTmpCanvas.height = 200;
-		myTmpCanvas.style.display = "none";
-		document.body.appendChild(myTmpCanvas);
-		helpers.push(myTmpCanvas.id);
 	}
 
 	// Randomize Council
@@ -278,16 +248,25 @@ window.onload = function() {
 		alreadySelected.push(randomIndex);
 		myCharacter.addTitleClaim(sampleTitleClaims[randomIndex], importance);
 	}
+
+	// Create 500 helper canvases
+	for (var i = 0; i < 500; i++)
+	{
+		var myTmpCanvas = document.createElement('canvas');
+		myTmpCanvas.id = "helper_" + nextHelper; // Id
+		nextHelper++; // Increase counter
+		myTmpCanvas.width = 200;
+		myTmpCanvas.height = 200;
+		myTmpCanvas.style.display = "none";
+		document.body.appendChild(myTmpCanvas);
+		helpers.push(myTmpCanvas.id);
+	}
+	
 	
 	//var taskOne = renderCharacterPortrait(myCharacter, [0,0,0], "province");
 	var renderStack = new RenderStack();
 	renderCharacter(myCharacter, [0,0,0], renderStack, "profile", helpers);
 	
-	/*for (var i = 0; i < tasks.length; i++)
-	{
-		renderStack.addElements(tasks[i]);
-	}*/
-
 	renderStack.callback = function () {
 		document.getElementById("loadingScreen").style.display = "none";
 		document.getElementById("profile").style.display = "block";
