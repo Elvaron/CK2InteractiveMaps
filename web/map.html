@@ -4,18 +4,20 @@
 <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
 <meta content="utf-8" http-equiv="encoding">
 
-<script src="jquery-3.4.1.min.js"></script>
+<script src="lib/jquery-3.4.1.min.js"></script>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
 integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
 crossorigin=""/>
 
-<link rel="stylesheet" href="map.css"/>
+<link rel="stylesheet" href="css/map.css"/>
 
 <!-- Make sure you put this AFTER Leaflet's CSS -->
 <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
 integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
 crossorigin=""></script>
+
+<title>World Map of Tadinthadar</title>
 
 </head>
 <body>
@@ -33,9 +35,9 @@ crossorigin=""></script>
 				<div>
 					<table width=100%>
 						<tr>
-							<td align="center"><input id="slide" type="range" min="0" max="1" step="0.1" value="0.5" onchange="updateOpacity('province', this.value)"></td>
-							<td align="center"><input id="slide" type="range" min="0" max="1" step="0.1" value="0.5" onchange="updateOpacity('region', this.value)"></td>
-							<td align="center"><input id="slide" type="range" min="0" max="1" step="0.1" value="0.5" onchange="updateOpacity('realm', this.value)"></td>
+							<td align="center"><input id="slide" type="range" min="0" max="1" step="0.1" value="0.4" onchange="updateOpacity('province', this.value)"></td>
+							<td align="center"><input id="slide" type="range" min="0" max="1" step="0.1" value="0.2" onchange="updateOpacity('region', this.value)"></td>
+							<td align="center"><input id="slide" type="range" min="0" max="1" step="0.1" value="0.2" onchange="updateOpacity('realm', this.value)"></td>
 						</tr>
 						<tr>
 							<td align="center">Province Opacity</td>
@@ -48,15 +50,15 @@ crossorigin=""></script>
 	</table>
 </center>
 
-<script src="map.js"></script>
-
-
-<script src="enums.js"></script>
-<script src="character.js"></script>
-<script src="traits.js"></script>
-<script src="metadata.js"></script>
-<script src="mapMetadata.js"></script>
-<script src="mapdata.js"></script>
+<script src="js/map.js"></script>
+<script src="js/info.js"></script>
+<script src="js/dataManagement.js"></script>
+<script src="js/enums.js"></script>
+<script src="js/character.js"></script>
+<script src="js/traits.js"></script>
+<script src="js/metadata.js"></script>
+<script src="js/mapMetadata.js"></script>
+<script src="js/mapdata.js"></script>
 
 </body>
 </html>

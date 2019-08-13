@@ -4,12 +4,12 @@
 <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
 <meta content="utf-8" http-equiv="encoding">
 
-<script src="jquery-3.4.1.min.js"></script>
-<script src="jquery-ui.min.js"></script>
-<script src="jquery.flowchart.js"></script>
+<script src="lib/jquery-3.4.1.min.js"></script>
+<script src="lib/jquery-ui.min.js"></script>
+<script src="lib/jquery.flowchart.js"></script>
 
-<link rel="stylesheet" href="characters.css"/>
-<link rel="stylesheet" href="jquery.flowchart.css">
+<link rel="stylesheet" href="css/characters.css"/>
+<link rel="stylesheet" href="css/jquery.flowchart.css">
 <title>Characters</title>
 </head>
 <body>
@@ -41,6 +41,18 @@
 						<tr>
 							<td>Age:</td>
 							<td><input type="number" name="CharacterAge" min="1" max="999" step="1"/></td>
+							<td>Type:</td>
+							<td><select id="CharacterGovernmentType">
+								<option value="0"></option>
+								<option value="1">Feudal</option>
+								<option value="2">Republic</option>
+								<option value="3">Theological</option>
+								<option value="4">Religious Leader</option>
+							</select></td>
+						</tr>
+						<tr>
+							<td>Custom Title:</td>
+							<td><input type="text" name="CustomTitle"/></td>
 							<td>Epithet:</td>
 							<td><input type="text" name="CharacterEpithet"/></td>
 						</tr>
@@ -111,12 +123,36 @@
 							<td style="max-width: 250;min-width: 250">Available Traits:</td>
 						</tr>
 						<tr>
-							<td><button type="button" style="max-width: 250;min-width: 250;min-width: 250" id="remove_trait" disabled>Remove Selected</button></td>
+							<td><button type="button" style="max-width: 250;min-width: 250" id="remove_trait" disabled>Remove Selected</button></td>
 							<td><button type="button" style="max-width: 250;min-width: 250" id="add_trait" disabled>Add Selected</button></td>
 						</tr>
 						<tr>
 							<td><select multiple style="max-width: 250;min-width: 250" id="select_character_current_traits" size=10></select></td>
 							<td><select multiple style="max-width: 250;min-width: 250" id="select_character_available_traits" size=10></select></td>
+						</tr>
+						<tr>
+							<td style="max-width: 200;min-width: 200">Held Titles:</td>
+							<td style="max-width: 200;min-width: 200">Available Titles:</td>
+						</tr>
+						<tr>
+							<td><button type="button" style="max-width: 200;min-width: 200" id="remove_held_title" disabled>Remove Selected</button></td>
+							<td><button type="button" style="max-width: 200;min-width: 200" id="add_held_title" disabled>Add Held</button></td>
+						</tr>
+						<tr>
+							<td><select multiple style="max-width: 200;min-width: 200" id="select_character_held_titles" size=10></select></td>
+							<td><select multiple style="max-width: 200;min-width: 200" id="select_character_available_titles" size=10></select></td>
+						</tr>
+						<tr>
+							<td style="max-width: 200;min-width: 200">Title Claims:</td>
+							<td style="max-width: 200;min-width: 200">Available Titles:</td>
+						</tr>
+						<tr>
+							<td><button type="button" style="max-width: 200;min-width: 200" id="remove_title_claim" disabled>Remove Selected</button></td>
+							<td><button type="button" style="max-width: 200;min-width: 200" id="add_title_claim" disabled>Add Claim</button></td>
+						</tr>
+						<tr>
+							<td><select multiple style="max-width: 200;min-width: 200" id="select_character_title_claims" size=10></select></td>
+							<td>Primary Title:<br /><select id="select_character_primary_title" size=1></select></td>
 						</tr>
 						<tr>
 							<td><button type="button" style="max-width: 250;min-width: 250" id="save_character" disabled>Save Character</button></td>
@@ -127,10 +163,27 @@
 			</td>
 			<td style="min-width:200;vertical-align: top;text-align: center">
 				<canvas id="portrait" width="200" height="200">Your browser does not support the HTML5 canvas tag.</canvas><br/>
+				<img name="house_emblem" src=""/><br />
 				<button type="button" style="max-width:250;min-width:200" id="randomPortrait" disabled>Randomize Portrait</button><br />
 				<button type="button" style="max-width:250;min-width:200" id="randomDndStats" disabled>Randomize D&D Stats</button><br />
 				<button type="button" style="max-width:250;min-width:200" id="randomTraits" disabled>Randomize Traits</button><br />
-				<img name="house_emblem" src=""/>				
+				<button type="button" style="max-width:250;min-width:200" id="randomAge" disabled>Randomize Age</button><br />
+				<button type="button" style="max-width:250;min-width:200" id="randomName" disabled>Randomize Name</button><br />
+				<button type="button" style="max-width:250;min-width:200" id="randomStronghold" disabled>Randomize Stronghold</button><br />
+				<button type="button" style="max-width:250;min-width:200" id="randomNpcClass" disabled>Randomize Class</button><br />
+				<button type="button" style="max-width:250;min-width:200" id="randomSpouse" disabled>Randomize Spouse</button><br />
+				<button type="button" style="max-width:250;min-width:200" id="randomParentage" disabled>Create Parents / Grandparents</button><br />
+				<button type="button" style="max-width:250;min-width:200" id="randomizeHoldings">I don't care about holdings</button><br />
+				<br />
+				<button type="button" style="max-width:250;min-width:200" id="randomCouncil" disabled>Randomize Council</button><br />
+				<button type="button" style="max-width:250;min-width:200" id="clearCouncil" disabled>Clear Council</button><br />
+				<br />
+				<button type="button" style="max-width:250;min-width:200" id="addRandomChild" disabled>Add random child</button><br />
+				<button type="button" style="max-width:250;min-width:200" id="addRandomCourtier" disabled>Add random courtier</button><br />
+				<button type="button" style="max-width:250;min-width:200" id="addRandomSibling" disabled>Add random sibling</button><br />
+				<br />
+				<button type="button" style="max-width:250;min-width:200" id="hideTakenTitles">Hide taken titles</button><br />
+				<button type="button" style="max-width:250;min-width:200" id="showTakenTitles">Show taken titles</button><br />
 			</td>
 		</tr>
 	</table>
@@ -140,21 +193,25 @@
 	<div id="character_relationships" class="flowchart-example-container flowchart-container" style="border:1px solid #BBB;min-width:1000;max-width:1000;min-height:600"></div>
 </center>
 
-<script src="provinces.js"></script>
-<script src="enums.js"></script>
-<script src="character.js"></script>
-<script src="traits.js"></script>
-<script src="metadata.js"></script>
-<script src="racialBonuses.js"></script>
-<script src="npcClasses.js"></script>
-<script src="downloader.js"></script>
-<script src="relationships.js"></script>
-<script src="canvasRenderer.js"></script>
-<script src="characterPortraitRenderer.js"></script>
+<script src="js/provinces.js"></script>
+<script src="js/enums.js"></script>
+<script src="js/character.js"></script>
+<script src="js/traits.js"></script>
+<script src="js/metadata.js"></script>
+<script src="js/racialBonuses.js"></script>
+<script src="js/npcClasses.js"></script>
+<script src="js/downloader.js"></script>
+<script src="js/relationships.js"></script>
+<script src="js/canvasRenderer.js"></script>
+<script src="js/characterPortraitRenderer.js"></script>
+<script src="js/titledata.js"></script>
+<script src="js/characterPortraitMetadata.js"></script>
+<script src="js/randomCharacterTraits.js"></script>
 
-<script src="randomCharacterTraits.js"></script>
+<script src="js/dataManagement.js"></script>
+<script src="js/load_characters.js"></script>
 
-<script src="load_characters.js"></script>
+<script src="js/charactersPage.js"></script>
 
 </body>
 </html>

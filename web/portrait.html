@@ -4,12 +4,12 @@
 <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
 <meta content="utf-8" http-equiv="encoding">
 
-<script src="jquery-3.4.1.min.js"></script>
-<script src="jquery-ui.min.js"></script>
-<script src="jquery.flowchart.js"></script>
+<script src="lib/jquery-3.4.1.min.js"></script>
+<script src="lib/jquery-ui.min.js"></script>
+<script src="lib/jquery.flowchart.js"></script>
 
-<link rel="stylesheet" href="characters.css"/>
-<link rel="stylesheet" href="jquery.flowchart.css">
+<link rel="stylesheet" href="css/characters.css"/>
+<link rel="stylesheet" href="css/jquery.flowchart.css">
 <title>Portrait</title>
 </head>
 <body>
@@ -29,6 +29,15 @@
 			<option value="0">Lowborn</option><option value="1">Baron/Baroness</option><option value="2">Count/Countess</option>
 			<option value="3">Duke/Duchess</option><option value="4">King/Queen</option><option value="5">Emperor/Empress</option>
 		</select></td></tr>
+		<tr><td>Race:</td></tr>
+		<tr><td><select id="CharacterRace" style="max-width:250;min-width:200">
+			<option value="Human">Human</option>
+			<option value="Stout Halfling">Halfling</option>
+			<option value="Hill Dwarf">Dwarf</option>
+			<option value="High Elf">Elf</option>
+			<option value="Half-Elf">Half-Elf</option>
+			<option value="Half-Orc">Half-Orc</option>
+		</select></td></tr>
 		<tr><td>&nbsp;</td></tr>
 		<tr><td>Seed</td></tr>
 		<tr><td><input type="text" name="RandomSeed" style="max-width:250;min-width:200"/></td></tr>
@@ -43,16 +52,18 @@
 
 </center>
 
-<script src="enums.js"></script>
-<script src="character.js"></script>
-<script src="traits.js"></script>
-<script src="metadata.js"></script>
-<script src="racialBonuses.js"></script>
-<script src="npcClasses.js"></script>
-<script src="downloader.js"></script>
-<script src="canvasRenderer.js"></script>
-<script src="characterPortraitRenderer.js"></script>
-<script src="characterPortraitRenderPage.js"></script>
+<script src="js/enums.js"></script>
+<script src="js/character.js"></script>
+<script src="js/traits.js"></script>
+<script src="js/metadata.js"></script>
+<script src="js/racialBonuses.js"></script>
+<script src="js/npcClasses.js"></script>
+<script src="js/downloader.js"></script>
+<script src="js/canvasRenderer.js"></script>
+<script src="js/randomCharacterTraits.js"></script>
+<script src="js/characterPortraitRenderer.js"></script>
+<script src="js/characterPortraitMetadata.js"></script>
+<script src="js/characterPortraitRenderPage.js"></script>
 
 </body>
 </html>

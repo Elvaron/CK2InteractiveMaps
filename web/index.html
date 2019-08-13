@@ -1,0 +1,98 @@
+<html>
+<head>
+
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+
+<script src="lib/jquery-3.4.1.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+crossorigin=""/>
+
+<link rel="stylesheet" href="css/map.css"/>
+
+<!-- Make sure you put this AFTER Leaflet's CSS -->
+<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+crossorigin=""></script>
+
+<title>World Map of Tadinthadar</title>
+
+</head>
+<body>
+
+<center>
+	<table width="1018">
+		<tr>
+			<td>
+				<div id="map_tadinthadar"></div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div>
+					<table width=100%>
+						<tr>
+							<td align="center"><input id="slide" type="range" min="0" max="1" step="0.1" value="0.4" onchange="updateOpacity('province', this.value)"></td>
+							<td align="center"><input id="slide" type="range" min="0" max="1" step="0.1" value="0.2" onchange="updateOpacity('region', this.value)"></td>
+							<td align="center"><input id="slide" type="range" min="0" max="1" step="0.1" value="0.2" onchange="updateOpacity('realm', this.value)"></td>
+						</tr>
+						<tr>
+							<td align="center">Province Opacity</td>
+							<td align="center">Region Opacity</td>
+							<td align="center">Realm Opacity</td>
+						</tr>
+					</table>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div>
+					<table width=100%>
+						<tr>
+							<td width="343" style="vertical-align: top">
+								<canvas id="province" width="343" height="446">Your browser does not support the HTML5 canvas tag.</canvas>
+							</td>
+							<td width="675" style="vertical-align: top">
+								<img src="profile/bg_loading.png" id="loadingScreen" style="display:none"/>
+								<canvas id="profile" width="675" height="693" title="" style="display:none">Your browser does not support the HTML5 canvas tag.</canvas>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div>
+					<canvas id="province_helper" width="200" height="200" style="display:none">Your browser does not support the HTML5 canvas tag.</canvas>
+					<canvas id="helper_1" width="200" height="200" style="display:none" purpose="primaryPortrait">Your browser does not support the HTML5 canvas tag.</canvas>
+					<canvas id="helper_2" width="200" height="200" style="display:none" purpose="spousePortrait">Your browser does not support the HTML5 canvas tag.</canvas>
+					<canvas id="helper_3" width="200" height="200" style="display:none" purpose="liegePortrait">Your browser does not support the HTML5 canvas tag.</canvas>
+					<canvas id="helper_4" width="200" height="200" style="display:none" purpose="heirPortrait">Your browser does not support the HTML5 canvas tag.</canvas>
+					<canvas id="helper_5" width="200" height="200" style="display:none" purpose="fatherPortrait">Your browser does not support the HTML5 canvas tag.</canvas>
+					<canvas id="helper_6" width="200" height="200" style="display:none" purpose="motherPortrait">Your browser does not support the HTML5 canvas tag.</canvas>
+					<canvas id="helper_7" width="200" height="200" style="display:none" purpose="fatherFatherPortrait">Your browser does not support the HTML5 canvas tag.</canvas>
+					<canvas id="helper_8" width="200" height="200" style="display:none" purpose="motherFatherPortrait">Your browser does not support the HTML5 canvas tag.</canvas>
+					<canvas id="helper_9" width="200" height="200" style="display:none" purpose="fatherMotherPortrait">Your browser does not support the HTML5 canvas tag.</canvas>
+					<canvas id="helper_10" width="200" height="200" style="display:none" purpose="motherMotherPortrait">Your browser does not support the HTML5 canvas tag.</canvas>
+					<canvas id="helper_11" width="200" height="200" style="display:none" purpose="regentPortrait">Your browser does not support the HTML5 canvas tag.</canvas>
+					<canvas id="council1" width="200" height="200" style="display:none" purpose="council1">Your browser does not support the HTML5 canvas tag.</canvas>
+					<canvas id="council2" width="200" height="200" style="display:none" purpose="council2">Your browser does not support the HTML5 canvas tag.</canvas>
+					<canvas id="council3" width="200" height="200" style="display:none" purpose="council3">Your browser does not support the HTML5 canvas tag.</canvas>
+					<canvas id="council4" width="200" height="200" style="display:none" purpose="council4">Your browser does not support the HTML5 canvas tag.</canvas>
+					<canvas id="council5" width="200" height="200" style="display:none" purpose="council5">Your browser does not support the HTML5 canvas tag.</canvas>
+				</div>
+			</td>
+		</tr>
+	</table>
+</center>
+
+<script src="js/map.min.js"></script>
+<script src="js/info.js"></script>
+<script src="js/mapdata.js"></script>
+
+</body>
+</html>
